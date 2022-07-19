@@ -6,7 +6,7 @@ export default function RecipeCard(props) {
     const { recip } = props;
 
     return (
-        <Col md="auto" className='m-4'>
+        <Col md="auto" className='m-5'>
             <Card style={{ width: '18rem' }}>
                 <Card.Img variant="top" src={recip.recipeImage} />
                 <Card.Body>

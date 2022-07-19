@@ -20,10 +20,17 @@ const addRecipe = async (req, res) => {
 
 const recpies_get_all = async (req, res, next) => {
     try {
-        // const { page = 1, limit = 3 } = req.query;
+        const PAGE_SIZE = 6;
+        const page = parseInt(req.query.page || "0");
+        const total = await Recipe.countDocuments({});
+
         const recipes = await Recipe.find()
-        // .limit(limit * 1).skip((page - 1) * limit);
-        res.status(200).send(recipes)
+            .limit(PAGE_SIZE)
+            .skip(PAGE_SIZE * page)
+        res.status(200).send({
+            recipes,
+            total: Math.ceil(total / PAGE_SIZE)
+        });
     } catch (error) {
         console.log(err);
         res.status(500).json({
@@ -31,6 +38,20 @@ const recpies_get_all = async (req, res, next) => {
         });
     }
 };
+// const recpies_get_all = async (req, res, next) => {
+//     try {
+//         // const { page = 1, limit = 3 } = req.query;
+
+//         const recipes = await Recipe.find()
+//         // .limit(limit * 1).skip((page - 1) * limit);
+//         res.status(200).send(recipes)
+//     } catch (error) {
+//         console.log(err);
+//         res.status(500).json({
+//             error: err
+//         });
+//     }
+// };
 
 
 

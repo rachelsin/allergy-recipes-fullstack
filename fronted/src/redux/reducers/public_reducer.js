@@ -4,13 +4,15 @@ import createReducer from "./reducerUtils";
 
 const initialState = {
     recipes: "",
+    totalPage: "",
     admin: "rachel",
     nameState: false
 };
 
 const publicData = {
     setRecipes(state, action) {
-        state.recipes = action.payload;
+        state.recipes = action.payload.recipes;
+        state.totalPage = action.payload.total;
     },
     setName(state, action) {
         state.nameState = action.payload;
