@@ -1,10 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/actions/action';
-import Ingredients from './Ingredients';
+import Ingredients from './ingredients/Ingredients';
 import NameAndDescrip from './NameAndDescrip';
 import Preparation from './Preparation';
+import RecipeImage from './RecipeImage';
 import Tags from './Tags';
+import C from "./ingredients/C";
 
 function mapStateToProps(state) {
     return {
@@ -17,6 +19,11 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecipe(props) {
+
+    const [contacts, setContacts] = useState("");
+
+
+    const recipeImageRef = useRef("")
 
     const [datapre, setDatapre] = useState([])
     const stepRef = useRef('')
@@ -32,15 +39,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
     ///////////////
     const recipeNameRef = useRef('');
     const descriptionRef = useRef('');
-    const nameRef = useRef('');
 
     async function handleSubmit(e) {
         e.preventDefault();
         let data = {
             nameRecipe: recipeNameRef.current.value,
+            recipeImage: recipeImageRef.current.value,
             tagsFreeOf: checked,
-            theRecipe: {
+            recipe: {
                 description: descriptionRef.current.value,
+                // ingredients: contacts,
                 ingredients: dataIngredients,
                 preparation: datapre
             }
@@ -61,6 +69,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
         <>
 
             <div className="container mt-4" >
+
+
                 <h4 className='mx-5' >Submit New Recipe</h4>
                 <p className="text-muted mx-5"> Write down the details of the recipe </p>
                 <div onSubmit={handleSubmit} autoComplete="off" method="POST">
@@ -88,7 +98,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
                             />
                         </div>
                         <div className='col-6 border'>
-
+                            <RecipeImage recipeImageRef={recipeImageRef} />
                         </div>
                     </div>
                     <div className="row bg-light text-dark">
@@ -99,7 +109,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
                                 stepRef={stepRef} />
                         </div>
                         <div className='col-6 border'>
-
+                            <C contacts={contacts} setContacts={setContacts} />
                         </div>
                     </div>
                     <div className='row'>

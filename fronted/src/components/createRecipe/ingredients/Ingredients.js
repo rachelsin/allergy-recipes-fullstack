@@ -23,6 +23,11 @@ export default function Ingredients(props) {
         measurementRef.current.value = "";
         ingredientRef.current.value = "";
     }
+    function removeFromCart(id) {
+        console.log(id);
+        let idItem = id;
+        setDataIngredients(dataIngredients.filter(item => item.id !== idItem));
+    }
 
     return (
         <>
@@ -43,15 +48,28 @@ export default function Ingredients(props) {
                             <th scope="col">Qty.</th>
                             <th scope="col">Measurement</th>
                             <th scope="col">Ingredient</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        {dataIngredients.map(allData => (
-                            <tr key={allData.id}>
-                                <td>{allData.qty}</td>
-                                <td>{allData.measurement} </td>
-                                <td> {allData.ingredient}</td>
+                        {dataIngredients.map(ingredient => (
+                            <tr key={ingredient.id}>
+                                <td>{ingredient.qty}</td>
+                                <td>{ingredient.measurement} </td>
+                                <td> {ingredient.ingredient}</td>
+                                <td>
+                                    <button
+                                        className='btn btn-outline-danger'
+                                        onClick={() => removeFromCart(ingredient.id)}
+                                    >Update
+                                    </button>
+                                    <button
+                                        className='btn btn-outline-danger'
+                                        onClick={() => removeFromCart(ingredient.id)}
+                                    >Delete
+                                    </button>
+                                </td>
                             </tr>
                         ))}
 

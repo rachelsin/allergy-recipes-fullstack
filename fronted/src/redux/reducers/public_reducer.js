@@ -3,16 +3,17 @@ import { actions } from '../actions/action';
 import createReducer from "./reducerUtils";
 
 const initialState = {
-    userData: null,
-    token: null,
+    recipes: "",
+    admin: "rachel",
+    nameState: false
 };
 
 const publicData = {
-    setUserData(state, action) {
-        state.userData = action.payload;
+    setRecipes(state, action) {
+        state.recipes = action.payload;
     },
-    setToken(state, action) {
-        state.token = localStorage.getItem("token");
+    setName(state, action) {
+        state.nameState = action.payload;
     }
 }
 export default produce((state, action) => createReducer(state, action, publicData), initialState);

@@ -5,6 +5,9 @@ const RecipeSchema = mongoose.Schema({
     nameRecipe: {
         type: String
     },
+    recipeImage: {
+        type: String
+    },
     author: {
         type: mongoose.Types.ObjectId, ref: 'User'
     },
@@ -18,7 +21,7 @@ const RecipeSchema = mongoose.Schema({
     likes: [
         { type: mongoose.Types.ObjectId, ref: 'User' }
     ],
-    theRecipe: {
+    recipe: {
         description: String,
         ingredients: [
             {

@@ -33,7 +33,7 @@ export const userCrud = ({ dispatch, getState }) => next => action => {
             })
             .catch(err => console.log('error:', err));
     }
-    if (action.type === 'ADD_RECIPE') {
+   /*  if (action.type === 'ADD_RECIPE') {
         myHeaders.append("Content-Type", "application/json");
         const requestOptions = {
             method: 'POST',
@@ -46,7 +46,7 @@ export const userCrud = ({ dispatch, getState }) => next => action => {
             .then(response => response.json())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-    }
+    } */
 
     return next(action);
 }
