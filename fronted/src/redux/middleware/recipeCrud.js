@@ -34,6 +34,25 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
             .catch(error => console.log('error', error));
 
     }
+    if (action.type === 'GET_NEW_RECIPES') {
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const pageNumber = action.payload;
+
+        fetch(`http://localhost:5001/recipes?page=0${pageNumber}`, requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                dispatch(actions.setARecipes(result));
+                // dispatch(actions.setNumberOfPages(total));
+            })
+            .catch(error => console.log('error', error));
+
+    }
+
 
     return next(action);
 }

@@ -20,7 +20,7 @@ const addRecipe = async (req, res) => {
 
 const recpies_get_all = async (req, res, next) => {
     try {
-        const PAGE_SIZE = 6;
+        const PAGE_SIZE = 3;
         const page = parseInt(req.query.page || "0");
         const total = await Recipe.countDocuments({});
 

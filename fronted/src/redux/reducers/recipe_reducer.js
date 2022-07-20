@@ -4,10 +4,15 @@ import createReducer from "./reducerUtils";
 
 const initialState = {
 
-    namess: false
+    namess: false,
+    recipesA: [],
+    numberOfPages: 0
 };
 
 const recipeData = {
-
+    setARecipes(state, action) {
+        state.recipesA = action.payload.recipes;
+        state.numberOfPages = action.payload.total;
+    },
 }
 export default produce((state, action) => createReducer(state, action, recipeData), initialState);
