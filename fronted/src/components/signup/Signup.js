@@ -4,7 +4,7 @@ import { actions } from '../../redux/actions/action';
 
 function mapStateToProps(state) {
     return {
-        token: state.public_reducer.token,
+        // token: state.public_reducer.token,
     };
 }
 
@@ -39,7 +39,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Signup(prop
                     <div className="row">
                         <div className="col-md-3 col-sm-6 m-auto">
                             <div className="center">
-                                <h1>Sign up</h1>
+                            <h1 className='text-center'>Sign up</h1>
                                 <p className="text-muted"> You can open new account for free!</p>
                                 <form onSubmit={handleSubmit} autoComplete="off" method="POST">
                                     <input type="email" className="form-control" id="email" placeholder="Email" ref={emailRef} />

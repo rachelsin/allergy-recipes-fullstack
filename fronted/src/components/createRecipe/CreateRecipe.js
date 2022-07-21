@@ -15,7 +15,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => ({
     addRecipe: (data) => dispatch(actions.addRecipe(data)),
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecipe(props) {
@@ -56,6 +55,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
         console.log(data);
         try {
             await props.addRecipe(data);
+            recipeNameRef.current.value = ""
+            descriptionRef.current.value = ""
+
         } catch (err) {
             console.log('error', err);
         }

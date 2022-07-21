@@ -30,23 +30,26 @@ export const userCrud = ({ dispatch, getState }) => next => action => {
             .then(data => {
                 console.log(data);
                 localStorage.setItem("token", data.token);
+                console.log(data.cheackSign);
+                dispatch(actions.setUser(data.cheackSign));
+
             })
             .catch(err => console.log('error:', err));
     }
-   /*  if (action.type === 'ADD_RECIPE') {
-        myHeaders.append("Content-Type", "application/json");
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(action.payload),
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:5001/addRecipe", requestOptions)
-            .then(response => response.json())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-    } */
+    /*  if (action.type === 'ADD_RECIPE') {
+         myHeaders.append("Content-Type", "application/json");
+         const requestOptions = {
+             method: 'POST',
+             headers: myHeaders,
+             body: JSON.stringify(action.payload),
+             redirect: 'follow'
+         };
+ 
+         fetch("http://localhost:5001/addRecipe", requestOptions)
+             .then(response => response.json())
+             .then(result => console.log(result))
+             .catch(error => console.log('error', error));
+     } */
 
     return next(action);
 }

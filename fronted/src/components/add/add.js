@@ -68,21 +68,29 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Add(props) 
                         <ul className="pagination justify-content-center">
                             <Pagination.First onClick={gotoStart} />
                             <Pagination.Prev onClick={gotoPrevious} />
-                            {
+                            {pages.map(pageIndex => (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    onClick={() => setPageNumber(pageIndex)}>
+                                    {pageIndex + 1}
+                                </Pagination.Item>
+
+                            ))}
+                            {/*   {
                                 pages.map(pageIndex => (
                                     <li className='page-item' key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
-                                        <span className="page-link" style={{ cursor: "pointer" }}>{pageIndex + 1}</span>
+                                        <a className="page-link" style={{ cursor: "pointer" }}>{pageIndex + 1}</a>
                                     </li>
                                 ))
-                            }
+                            } */}
                             <Pagination.Next onClick={gotoNext} />
                             <Pagination.Last onClick={gotoEnd} />
-                            
+
                         </ul>
                     </nav>
                 </div>
 
-                
+
             </div>
 
         </>

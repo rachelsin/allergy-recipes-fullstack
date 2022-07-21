@@ -5,24 +5,24 @@ import { Navbar, Nav, Container, NavDropdown, Form, Button } from 'react-bootstr
 import { actions } from '../../redux/actions/action';
 
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
     return {
-
+        userName: state.user.user.userName,
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-
-
+    setRemoveUser: () => dispatch(actions.setRemoveUser()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(function NavbarTop(props) {
+    const { userName } = props;
+    // console.log(userName);
 
     function handelLogout() {
-        console.log("hjv");
         localStorage.removeItem("token");
-        console.log('remove');
-        console.log('hi');
+        props.setRemoveUser()
+
     }
 
     return (
@@ -45,12 +45,22 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavbarTop(p
                         </Nav>
 
                         <Nav>
-                            <NavLink className="nav-link" to="/signup">signup</NavLink>
-                            <Navbar.Text>/</Navbar.Text>
-                            <NavLink className="nav-link" to="/login">login</NavLink>
-                            <div className="col-4 align-self-center">
-                                <button type="button" className="btn btn-outline-secondary" onClick={handelLogout} >Logout</button>
-                            </div>
+                            {!userName &&
+                                <>
+                                    <NavLink className="nav-link" to="/signup">signup</NavLink>
+                                    <Navbar.Text>/</Navbar.Text>
+                                    <NavLink className="nav-link" to="/login">login</NavLink>
+                                </>
+                            }
+
+                            {userName &&
+                                <>
+                                    <Navbar.Text className="mx-2">Hi,{userName} </Navbar.Text>
+                                    <div className="col-4 align-self-center">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={handelLogout} >Logout</button>
+                                    </div>
+                                </>
+                            }
 
                         </Nav>
                     </Navbar.Collapse>

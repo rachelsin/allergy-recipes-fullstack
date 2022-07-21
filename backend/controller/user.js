@@ -23,6 +23,7 @@ const login = async (req, res) => {
         let cheackSign = await User.findOne(
             { email: req.body.email, password: req.body.password }
         );
+        console.log("cheackSign:" + cheackSign);
         if (cheackSign == null) {
             res.status(200).send("this user is not found , try again");
         } else {
@@ -30,7 +31,7 @@ const login = async (req, res) => {
                 { email: req.body.email, id: cheackSign._id },
                 process.env.SECRET
             );
-            res.status(200).json({ token: token });
+            res.status(200).json({ token: token, cheackSign });
             console.log('token succses');
 
         }
