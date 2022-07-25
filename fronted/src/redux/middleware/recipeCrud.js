@@ -5,14 +5,22 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
     myHeaders.append("Content-Type", "application/json");
 
     if (action.type === 'ADD_RECIPE') {
+        const raw = JSON.stringify({
+            "nameRecipe": action.payload.nameRecipe,
+            "tagsFreeOf": action.payload.tagsFreeOf,
+            "description": action.payload.description,
+            "ingredients": action.payload.ingredients,
+            "preparation": action.payload.preparation,
+            "user_id": getState().user.user.id
+        });
+        console.log(raw);
 
         const requestOptions = {
             method: 'POST',
             headers: myHeaders,
-            body: JSON.stringify(action.payload),
+            body: raw,
             redirect: 'follow'
         };
-
         fetch("http://localhost:5001/addRecipe", requestOptions)
             .then(response => response.json())
             .then(result => console.log(result))
@@ -24,7 +32,6 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
             headers: myHeaders,
             redirect: 'follow'
         };
-
         fetch("http://localhost:5001/recipes", requestOptions)
             .then(response => response.json())
             .then(result => {
@@ -32,7 +39,6 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
                 dispatch(actions.setName(true))
             })
             .catch(error => console.log('error', error));
-
     }
     if (action.type === 'GET_NEW_RECIPES') {
         let requestOptions = {
@@ -50,9 +56,6 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
                 // dispatch(actions.setNumberOfPages(total));
             })
             .catch(error => console.log('error', error));
-
     }
-
-
     return next(action);
 }

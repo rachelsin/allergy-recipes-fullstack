@@ -3,10 +3,20 @@ const Recipe = require('../model/recipe');
 
 // function Add a recipe 
 const addRecipe = async (req, res) => {
-    const newRecipe = new Recipe(req.body)
+    const defaultImage = "https://cdn.pixabay.com/photo/2017/10/22/21/41/turmeric-2879382_960_720.jpg";
     try {
-        const defaultImage = "https://cdn.pixabay.com/photo/2017/10/22/21/41/turmeric-2879382_960_720.jpg";
-        newRecipe.recipeImage = req.body.recipeImage ? req.body.recipeImage : defaultImage;
+        const newRecipe = new Recipe({
+            nameRecipe: req.body.nameRecipe,
+            description: req.body.description,
+            recipeImage: req.body.recipeImage ? req.body.recipeImage : defaultImage,
+            author: req.body.author,
+            tagsFreeOf: req.body.tagsFreeOf,
+            ingredients: req.body.ingredients,
+            preparation: req.body.preparation,
+            user_id: req.body.user_id,
+        })
+        console.log(newRecipe);
+
         const recipe = await newRecipe.save();
         console.log(recipe);
         res.json({ status: 200 })

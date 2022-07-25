@@ -1,28 +1,28 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import { nanoid } from "nanoid";
-// import data from "./mock-data.json";
 import ReadOnlyRow from "./A";
 import EditableRow from "./B";
 
-export default function Ingredientest(props) {
+export default function IngredientFather(props) {
 
-    const { contacts, setContacts } = props;
-    // const [contacts, setContacts] = useState("");
+    const { ingredientData, setIngredientData } = props;
     const [addFormData, setAddFormData] = useState({
-        fullName: "",
-        address: "",
-        phoneNumber: "",
-        email: "",
+        id: "",
+        qty: "",
+        measurement: "",
+        ingredient: "",
     });
 
     const [editFormData, setEditFormData] = useState({
-        fullName: "",
-        address: "",
-        phoneNumber: "",
-        email: "",
+        id: "",
+        qty: "",
+        measurement: "",
+        ingredient: "",
     });
 
-    const [editContactId, setEditContactId] = useState(null);
+    
+
+    const [editDataId, setEditDataId] = useState(null);
 
     const handleAddFormChange = (event) => {
         event.preventDefault();
@@ -51,65 +51,63 @@ export default function Ingredientest(props) {
     const handleAddFormSubmit = (event) => {
         event.preventDefault();
 
-        const newContact = {
+        const newData = {
             id: nanoid(),
-            fullName: addFormData.fullName,
-            address: addFormData.address,
-            phoneNumber: addFormData.phoneNumber,
-            email: addFormData.email,
+            qty: addFormData.qty,
+            measurement: addFormData.measurement,
+            ingredient: addFormData.ingredient,
         };
 
-        const newContacts = [...contacts, newContact];
-        setContacts(newContacts);
+        const newIngredientData = [...ingredientData, newData];
+        setIngredientData(newIngredientData);
+        
     };
 
     const handleEditFormSubmit = (event) => {
         event.preventDefault();
 
         const editedContact = {
-            id: editContactId,
-            fullName: editFormData.fullName,
-            address: editFormData.address,
-            phoneNumber: editFormData.phoneNumber,
-            email: editFormData.email,
+            id: editDataId,
+            qty: editFormData.qty,
+            measurement: editFormData.measurement,
+            ingredient: editFormData.ingredient,
         };
 
-        const newContacts = [...contacts];
+        const newContacts = [...ingredientData];
 
-        const index = contacts.findIndex((contact) => contact.id === editContactId);
+        const index = ingredientData.findIndex((data) => data.id === editDataId);
 
         newContacts[index] = editedContact;
 
-        setContacts(newContacts);
-        setEditContactId(null);
+        setIngredientData(newContacts);
+        setEditDataId(null);
     };
 
-    const handleEditClick = (event, contact) => {
+    const handleEditClick = (event, data) => {
         event.preventDefault();
-        setEditContactId(contact.id);
+        setEditDataId(data.id);
 
         const formValues = {
-            fullName: contact.fullName,
-            address: contact.address,
-            phoneNumber: contact.phoneNumber,
-            email: contact.email,
+            qty: data.qty,
+            measurement: data.measurement,
+            ingredient: data.ingredient,
         };
 
         setEditFormData(formValues);
     };
 
     const handleCancelClick = () => {
-        setEditContactId(null);
+        setEditDataId(null);
     };
 
-    const handleDeleteClick = (contactId) => {
-        const newContacts = [...contacts];
+    const handleDeleteClick = (dataId) => {
+        const newContacts = [...ingredientData];
 
-        const index = contacts.findIndex((contact) => contact.id === contactId);
+        const index = ingredientData.findIndex((data) => data.id === dataId);
 
         newContacts.splice(index, 1);
 
-        setContacts(newContacts);
+        setIngredientData(newContacts);
     };
 
     return (
@@ -119,7 +117,7 @@ export default function Ingredientest(props) {
                 <input
                     className="form-control col m-2"
                     type="text"
-                    name="fullName"
+                    name="qty"
                     required="required"
                     placeholder="Enter a Qty..."
                     onChange={handleAddFormChange}
@@ -127,7 +125,7 @@ export default function Ingredientest(props) {
                 <input
                     className="form-control col m-2"
                     type="text"
-                    name="address"
+                    name="measurement"
                     required="required"
                     placeholder="Measurement..."
                     onChange={handleAddFormChange}
@@ -135,7 +133,7 @@ export default function Ingredientest(props) {
                 <input
                     className="form-control col m-2"
                     type="text"
-                    name="phoneNumber"
+                    name="ingredient"
                     required="required"
                     placeholder="Ingredient..."
                     onChange={handleAddFormChange}
@@ -144,7 +142,7 @@ export default function Ingredientest(props) {
                     className='btn col-1 btn-danger m-2'
                     onClick={handleAddFormSubmit} type="submit">Add</button>
             </div>
-            {contacts ?
+            {ingredientData ?
                 <form onSubmit={handleEditFormSubmit}>
                     <table className="table border table-sm table-bordered">
                         <thead>
@@ -156,10 +154,10 @@ export default function Ingredientest(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {contacts ?
-                                contacts.map((contact) => (
+                            {ingredientData ?
+                                ingredientData.map((data) => (
                                     <>
-                                        {editContactId === contact.id ? (
+                                        {editDataId === data.id ? (
                                             <EditableRow
                                                 editFormData={editFormData}
                                                 handleEditFormChange={handleEditFormChange}
@@ -167,7 +165,7 @@ export default function Ingredientest(props) {
                                             />
                                         ) : (
                                             <ReadOnlyRow
-                                                contact={contact}
+                                                data={data}
                                                 handleEditClick={handleEditClick}
                                                 handleDeleteClick={handleDeleteClick}
                                             />

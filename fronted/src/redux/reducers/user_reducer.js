@@ -19,6 +19,7 @@ const userData = {
         state.user.userName = action.payload.name;
         state.user.userEmail = action.payload.email;
         state.user.myRecipes = action.payload.myRecipes;
+        state.user.id = action.payload._id;
         // state.user.favoriteRecipes = action.payload.favoriteRecipes;
         // state.user.myRecipes = action.payload.myRecipes;
         // state.user.id = action.payload._id;
