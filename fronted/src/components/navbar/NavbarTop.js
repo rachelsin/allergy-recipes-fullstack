@@ -40,7 +40,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavbarTop(p
                         >
                             <NavLink className="nav-link" to="/">Home</NavLink>
                             <NavLink className="nav-link" to="/createRecipe">Add a recipe</NavLink>
-                            <NavLink className="nav-link" to="/add">Add</NavLink>
+                            {/* <NavLink className="nav-link" to="/add">Add</NavLink> */}
 
                         </Nav>
 

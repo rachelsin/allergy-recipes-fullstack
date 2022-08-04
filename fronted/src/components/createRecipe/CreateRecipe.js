@@ -7,6 +7,7 @@ import Preparation from './Preparation';
 import RecipeImage from './RecipeImage';
 import Tags from './Tags';
 import IngredientFather from "./ingredients/C";
+import Image from './Image';
 
 function mapStateToProps(state) {
     return {
@@ -27,11 +28,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
     const stepRef = useRef('')
     // checkbox Free of
     const [checked, setChecked] = useState([]);
-    const checkList = ["Milk", "peanut", "Egg", "soy", "Tree Nut", "Wheat", "Sesame", "Fish"];
+    const checkList = ["milk", "peanut", "egg", "soy", "tree nut", "wheat", "sesame", "fish"];
 
 
     const [dataIngredients, setDataIngredients] = useState([])
-   
+
 
     ///////////////
     const recipeNameRef = useRef('');
@@ -78,10 +79,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
                     </div>
                     <div className="row bg-light text-dark">
                         <div className='col-6 border'>
-                                <Ingredients
-                                    dataIngredients={dataIngredients}
-                                    setDataIngredients={setDataIngredients}
-                                />
+                            <Ingredients
+                                dataIngredients={dataIngredients}
+                                setDataIngredients={setDataIngredients}
+                            />
                         </div>
                         <div className='col-6 border'>
                             <RecipeImage recipeImageRef={recipeImageRef} />
@@ -95,9 +96,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
                                 stepRef={stepRef} />
                         </div>
                         <div className='col-6 border'>
-                          {/*   <IngredientFather
+                            {/*   <IngredientFather
                                 ingredientData={ingredientData}
                                 setIngredientData={setIngredientData} /> */}
+                            <Image />
                         </div>
                     </div>
                     <div className='row'>

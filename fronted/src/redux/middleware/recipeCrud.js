@@ -3,7 +3,6 @@ import { actions } from "../actions/action";
 export const recipeCrud = ({ dispatch, getState }) => next => action => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
     if (action.type === 'ADD_RECIPE') {
         const raw = JSON.stringify({
             "nameRecipe": action.payload.nameRecipe,
@@ -13,7 +12,6 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
             "preparation": action.payload.preparation,
             "user_id": getState().user.user.id
         });
-        console.log(raw);
 
         const requestOptions = {
             method: 'POST',
@@ -41,21 +39,47 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
             .catch(error => console.log('error', error));
     }
     if (action.type === 'GET_NEW_RECIPES') {
-        let requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-        const pageNumber = action.payload;
+        /*  const myHeaders = new Headers();
+         myHeaders.append("Content-Type", "application/json");
+         let requestOptions = {
+             method: 'GET',
+             headers: myHeaders,
+             redirect: 'follow'
+         };
+         const pageNumber = action.payload;
+ 
+         fetch(`http://localhost:5001/recipes?page=0${pageNumber}`, requestOptions)
+             .then((response) => response.json())
+             .then((result) => {
+                 dispatch(actions.setARecipes(result));
+                 // dispatch(actions.setNumberOfPages(total));
+             })
+             .catch(error => console.log('error', error)); */
+    }
+    if (action.type === 'GET_RECIPES_BY_TAGS') {
+        // let requestOptions = {
+        //     method: 'GET',
+        //     redirect: 'follow'
+        // };
+        const { checked, pageNumber } = action.payload;
+        let searchString;
+        if (typeof checked === 'undefined') {
+            searchString = checked;
+        } else {
+            searchString = checked.join('+');
+        }
+        console.log(searchString, pageNumber);
+        fetch(`http://localhost:5001/recipes/search/?tags=${searchString}&page=0${pageNumber}`)
 
-        fetch(`http://localhost:5001/recipes?page=0${pageNumber}`, requestOptions)
+            /*  let x = `/?tags=${searchString}&page=0${pageNumber}` */
             .then((response) => response.json())
             .then((result) => {
                 console.log(result);
                 dispatch(actions.setARecipes(result));
                 // dispatch(actions.setNumberOfPages(total));
             })
-            .catch(error => console.log('error', error));
+            .catch(error => console.log('error', error)); 
     }
+
     return next(action);
 }

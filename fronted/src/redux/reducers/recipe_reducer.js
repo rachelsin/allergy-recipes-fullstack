@@ -12,7 +12,7 @@ const initialState = {
 const recipeData = {
     setARecipes(state, action) {
         state.recipesA = action.payload.recipes;
-        state.numberOfPages = action.payload.total;
+        state.numberOfPages = action.payload.totalPages;
     },
 }
 export default produce((state, action) => createReducer(state, action, recipeData), initialState);

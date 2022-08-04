@@ -1,58 +1,102 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import { actions } from '../../redux/actions/action';
+import { Row, Pagination } from 'react-bootstrap';
 
-import RecipeCard from './RecipeCard'
-import Pagination from './pagination/Pagination'
-
-import { Row } from 'react-bootstrap';
-
+import RecipeCard from './RecipeCard';
+import Tags from '../createRecipe/Tags';
 
 const mapStateToProps = (state) => {
     return {
-        recipes: state.public.recipes,
-        nameState: state.recipe.nameState
+        recipes: state.recipe.recipesA,
+        numberOfPages: state.recipe.numberOfPages,
     };
 }
-
 const mapDispatchToProps = (dispatch) => ({
-    getRecipes: () => dispatch(actions.getAllRecipes()),
-
+    // getNewRecipes: (pageNumber) => dispatch(actions.getNewRecipes(pageNumber)),
+    getRecipesByTags: ({ checked, pageNumber }) => dispatch(actions.getRecipesByTags({ checked, pageNumber })),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(function Home(props) {
 
-    const { recipes, nameState } = props;
+    const [checked, setChecked] = useState([]);
+    const checkList = ["milk", "peanut", "egg", "soy", "tree nut", "wheat", "sesame", "fish"];
+
+    const { recipes, numberOfPages } = props;
+
+    const [pageNumber, setPageNumber] = useState(0)
+    // const [numberOfPages, setNumberOfPages] = useState(0)
+    // const [recipes, setRecipes] = useState([])
+
+    const pages = new Array(numberOfPages).fill(null).map((v, i) => i)
+
+    /*  useEffect(() => {
+         props.getNewRecipes(pageNumber)
+ 
+     }, [pageNumber]) */
 
     useEffect(() => {
-        props.getRecipes()
-    }, []);
+        props.getRecipesByTags({ checked, pageNumber })
+
+    }, [checked, pageNumber])
+
+    const gotoPrevious = () => {
+        setPageNumber(Math.max(0, pageNumber - 1));
+    }
+
+    const gotoNext = () => {
+        setPageNumber(Math.min(numberOfPages - 1, pageNumber + 1));
+    }
+    const gotoStart = () => {
+        setPageNumber(0);
+    }
+    const gotoEnd = () => {
+        setPageNumber(numberOfPages - 1);
+    }
 
     return (
-        <div className='container mt-4'>
-            {/* <h4 className='mx-5' >Recently uploaded recipes</h4> */}
-
-            <div className='mt-5'>
-                <div className='m-auto'>
-                    <Row className="justify-content-md-center">
-                        {recipes.length > 0 &&
-                            recipes.map(recip => {
-                                return (
-                                    <RecipeCard key={recip._id} recip={recip} />
-                                )
-                            })
-                        }
-                    </Row>
+        <>
+            <div className='App'>
+                <div className='m-3'>
+                    {/* <h3 className='mb-5'>Page of {pageNumber + 1}</h3> */}
+                    <div className='row border'>
+                        <div className='col'>
+                            <Tags checked={checked}
+                                setChecked={setChecked}
+                                checkList={checkList} />
+                        </div>
+                    </div>
+                    <div className='mt-5'>
+                        <div className='m-auto'>
+                            <Row className="justify-content-md-center">
+                                {recipes.length > 0 &&
+                                    recipes.map(recip => {
+                                        return (
+                                            <RecipeCard key={recip._id} recip={recip} />
+                                        )
+                                    })
+                                }
+                            </Row>
+                        </div>
+                    </div>
+                    <nav aria-label="Page navigation example">
+                        <ul className="pagination justify-content-center">
+                            <Pagination.First onClick={gotoStart} />
+                            <Pagination.Prev onClick={gotoPrevious} />
+                            {pages.map(pageIndex => (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    onClick={() => setPageNumber(pageIndex)}>
+                                    {pageIndex + 1}
+                                </Pagination.Item>
+                            ))}
+                            <Pagination.Next onClick={gotoNext} />
+                            <Pagination.Last onClick={gotoEnd} />
+                        </ul>
+                    </nav>
                 </div>
             </div>
-            <div className="col-md-3 m-auto">
-                <div className="center">
-                    <Pagination />
-                </div>
-            </div>
-
-
-
-        </div>
+        </>
     )
-})
+}
+)
