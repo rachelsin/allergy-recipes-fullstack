@@ -5,6 +5,18 @@ import { Row, Pagination } from 'react-bootstrap';
 
 import RecipeCard from './RecipeCard';
 import Tags from '../createRecipe/Tags';
+import SearchTags from '../search/SearchTags';
+import SearchTagImage from '../search/SearchTagImage';
+
+import eggs from '../../images/eggs.png'
+import fish from '../../images/fish.png'
+import milk from '../../images/milk.png'
+import nuts from '../../images/nuts.png'
+import peanuts from '../../images/peanuts.png'
+import sesame from '../../images/sesame.png'
+import soya from '../../images/soya.png'
+import wheat from '../../images/wheat.png'
+
 
 const mapStateToProps = (state) => {
     return {
@@ -21,6 +33,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
 
     const [checked, setChecked] = useState([]);
     const checkList = ["milk", "peanut", "egg", "soy", "tree nut", "wheat", "sesame", "fish"];
+    const allergyFood = [
+        { nameList: "milk", nameImage: milk, nameWrite: "Milk" },
+        { nameList: "peanut", nameImage: peanuts, nameWrite: "Peanut" },
+        { nameList: "egg", nameImage: eggs, nameWrite: "Egg" },
+        { nameList: "soy", nameImage: soya, nameWrite: "Soya" },
+        { nameList: "nuts", nameImage: nuts, nameWrite: "Nuts" },
+        { nameList: "wheat", nameImage: wheat, nameWrite: "Wheat" },
+        { nameList: "sesame", nameImage: sesame, nameWrite: "Sesame" },
+        { nameList: "fish", nameImage: fish, nameWrite: "Fish" },
+    ]
 
     const { recipes, numberOfPages } = props;
 
@@ -57,15 +79,26 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
     return (
         <>
             <div className='App'>
-                <div className='m-3'>
+                <div className='mb-3'>
                     {/* <h3 className='mb-5'>Page of {pageNumber + 1}</h3> */}
-                    <div className='row border'>
-                        <div className='col'>
+                    <div className='row bg-l '>
+                        <div className='col-12'>
+                            {/* <SearchTags /> */}
+                            <SearchTagImage
+                                checked={checked}
+                                setChecked={setChecked}
+                                allergyFood={allergyFood}
+                            />
+                        </div>
+                    </div>
+                    {/* <div className='row border'>
+
+                         <div className='col'>
                             <Tags checked={checked}
                                 setChecked={setChecked}
                                 checkList={checkList} />
                         </div>
-                    </div>
+                    </div> */}
                     <div className='mt-5'>
                         <div className='m-auto'>
                             <Row className="justify-content-md-center">

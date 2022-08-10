@@ -10,6 +10,7 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
             "description": action.payload.description,
             "ingredients": action.payload.ingredients,
             "preparation": action.payload.preparation,
+            "recipeImage": action.payload.recipeImage,
             "user_id": getState().user.user.id
         });
 
@@ -78,7 +79,7 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
                 dispatch(actions.setARecipes(result));
                 // dispatch(actions.setNumberOfPages(total));
             })
-            .catch(error => console.log('error', error)); 
+            .catch(error => console.log('error', error));
     }
 
     return next(action);

@@ -12,12 +12,15 @@ export default function Ingredients(props) {
     // const qtyRef = useRef('')
     // const measurementRef = useRef('')
     // const ingredientRef = useRef('')
+    const measurementArray = ["cup", "tsp", "tbsp", "gram", "kg", "ml", "liter", "unit", "package"]
 
     const [dataId, setDataId] = useState(null);
 
     const [qty, setQty] = useState("")
     const [measurement, setMeasurement] = useState("")
     const [ingredient, setIngredient] = useState("")
+
+    const [measurementSelect, setMeasurementSelect] = useState("")
 
     const [editQty, setEditQty] = useState("")
     const [editMeasurement, setEditMeasurement] = useState("")
@@ -48,7 +51,7 @@ export default function Ingredients(props) {
     }
 
     function editFromData(data) {
-        const {id,qty,measurement,ingredient} = data 
+        const { id, qty, measurement, ingredient } = data
         setDataId(id)
         setEditQty(qty)
         setEditMeasurement(measurement)
@@ -58,9 +61,9 @@ export default function Ingredients(props) {
     function handleCancelClick() {
         setDataId(null)
     }
-    function saveEditFromData(id){
-        const editData ={
-            id:id,
+    function saveEditFromData(id) {
+        const editData = {
+            id: id,
             qty: editQty,
             measurement: editMeasurement,
             ingredient: editIngredient
@@ -80,6 +83,13 @@ export default function Ingredients(props) {
                 <input type="text" className="form-control col m-2" placeholder="Qty." onChange={(e) => setQty(e.target.value)} ref={qtyRef} />
                 <input type="text" className="form-control col m-2" placeholder="Measurement" onChange={(e) => setMeasurement(e.target.value)} ref={measurementRef} />
                 <input type="text" className="form-control col m-2" placeholder="Ingredient" onChange={(e) => setIngredient(e.target.value)} ref={ingredientRef} />
+                <select onChange={(e) => setMeasurementSelect(e.target.value)}
+                    className="form-select" aria-label="Default select example">
+                    {measurementArray.map(measurement => {
+                        <option key={measurement} value={measurement}>{measurement}</option>
+                    })}
+                </select>
+                {measurementSelect}
                 <button className='btn col btn-danger m-2' onClick={addLine}>add</button>
             </div>
             <br></br>

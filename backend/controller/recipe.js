@@ -9,9 +9,9 @@ const { PAGE_SIZE } = require('../config/config');
 // async ({ nameRecipe : { nameRecipe: req.body.nameRecip },description:{description:req.body.description} }, res) =>
 
 // function Add a recipe 
-const addRecipe = async (req, res) => {
+const addRecipe = async ({body: {nameRecipe, description,...body}}, res) => {
     try {
-        const { nameRecipe, description, recipeImage, author, tagsFreeOf, ingredients, preparation, user_id } = req.body;
+        const {  recipeImage, author, tagsFreeOf, ingredients, preparation, user_id } = body;
 
         const defaultImage = "https://cdn.pixabay.com/photo/2017/10/22/21/41/turmeric-2879382_960_720.jpg";
 

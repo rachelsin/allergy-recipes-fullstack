@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Navbar, Nav, Container, NavDropdown, Form, Button } from 'react-bootstrap';
 import { actions } from '../../redux/actions/action';
 
-
+import './nav.css'
 const mapStateToProps = (state) => {
     return {
         userName: state.user.user.userName,
@@ -28,7 +28,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavbarTop(p
     return (
         <>
 
-            <Navbar bg="white" expand="lg" className="shadow-sm">
+            <Navbar bg="white" expand="lg" className="shadow-sm bg-l">
                 <Container>
                     <Navbar.Brand>Allergy Recipes</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
