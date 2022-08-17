@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import eggs from '../../images/eggs.png'
@@ -13,30 +13,35 @@ import wheat from '../../images/wheat.png'
 import './searchTag.css'
 
 export default function SearchTagImage(props) {
-    const { checked, setChecked, allergyFood } = props
+    const { checked, setChecked, allergyFood, myHistorySearch, setMyHistorySearch, checkIf } = props
     // const [checked, setChecked] = useState([]);
     const checkList = ["Milk", "peanut", "Egg", "soy", "Tree Nut", "Wheat", "Sesame", "Fish"];
-  /*   const allergyFood = [
-        { nameList: "milk", nameImage: milk, nameWrite: "Milk" },
-        { nameList: "peanut", nameImage: peanuts, nameWrite: "Peanut" },
-        { nameList: "egg", nameImage: eggs, nameWrite: "Egg" },
-        { nameList: "soy", nameImage: soya, nameWrite: "Soya" },
-        { nameList: "nuts", nameImage: nuts, nameWrite: "Nuts" },
-        { nameList: "wheat", nameImage: wheat, nameWrite: "Wheat" },
-        { nameList: "sesame", nameImage: sesame, nameWrite: "Sesame" },
-        { nameList: "fish", nameImage: fish, nameWrite: "Fish" },
-    ] */
+    /*   const allergyFood = [
+          { nameList: "milk", nameImage: milk, nameWrite: "Milk" },
+          { nameList: "peanut", nameImage: peanuts, nameWrite: "Peanut" },
+          { nameList: "egg", nameImage: eggs, nameWrite: "Egg" },
+          { nameList: "soy", nameImage: soya, nameWrite: "Soya" },
+          { nameList: "nuts", nameImage: nuts, nameWrite: "Nuts" },
+          { nameList: "wheat", nameImage: wheat, nameWrite: "Wheat" },
+          { nameList: "sesame", nameImage: sesame, nameWrite: "Sesame" },
+          { nameList: "fish", nameImage: fish, nameWrite: "Fish" },
+      ] */
     // const checkListasa = ["milk", "peanut", "egg", "soy", "tree nut", "wheat", "sesame", "fish"];
+
 
     // Add/Remove checked item from list
     const handleCheck = (event) => {
         let updatedList = [...checked];
+        console.log(checked);
         if (event.target.checked) {
             updatedList = [...checked, event.target.value];
         } else {
             updatedList.splice(checked.indexOf(event.target.value), 1);
         }
-        setChecked(updatedList);
+        let update = [...new Set(updatedList)];
+
+        setChecked(update);
+        console.log(checked);
     };
 
     // Generate string of checked items
@@ -56,14 +61,16 @@ export default function SearchTagImage(props) {
         border: "3px solid #feedc0c7"
     };
     return (
-        <div className="app">
+        <div className="app ">
             <div className="checkList row">
                 {/* <div className="title">Free of:</div> */}
-                <div className="app">
+                <div className="app ">
                     {allergyFood.map((item, index) => (
 
-                        <label className="option_item mx-3" key={index}>
-                            <input value={item.nameList} type="checkbox" onChange={handleCheck} className="checkbox" />
+                        <label className="option_item mx-3 " key={index}>
+                            <input value={item.nameList} type="checkbox" onChange={handleCheck} className="checkbox"
+                                checked={checkIf(item.nameList)}
+                            />
                             <div className="option_inner" >
                                 <div className="tickmark">
                                     <div className="line"></div>
@@ -78,7 +85,7 @@ export default function SearchTagImage(props) {
                     ))}
                 </div>
             </div >
-           {/*  <div>
+            {/*  <div>
                 {`Items checked are: ${checkedItems}`}
             </div> */}
         </div >

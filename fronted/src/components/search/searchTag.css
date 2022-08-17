@@ -60,18 +60,19 @@
 .option_item .checkbox:checked~.option_inner {
     border-color: #3b5999;
     /* color: #3b5999; */
-    background: rgba(254, 237, 192, 0.782);
+    background: #feedc0c7;
     border-radius: 100%;
 }
-.line{
+
+.line {
     width: calc(1.21 * 4rem);
-        transform: rotate(-45deg);
-        transform-origin: bottom left;
-        border-top: 3px solid #feedc0c7;
-        position: absolute;
-        bottom: 40px;
-        left: 28px;
-        box-sizing: border-box;
+    transform: rotate(-45deg);
+    transform-origin: bottom left;
+    border-top: 3px solid #feedc0c7;
+    position: absolute;
+    bottom: 40px;
+    left: 28px;
+    box-sizing: border-box;
 }
 
 /* .checkbox:checked {

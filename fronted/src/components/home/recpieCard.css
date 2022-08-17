@@ -1,0 +1,36 @@
+.box {
+    width: 60%;
+    height: 30px;
+    background-color: #ffe6a3;
+
+    /* width: calc(1.21 * 4rem); */
+    /* transform: rotate(-45deg); */
+    /* transform-origin: bottom left; */
+    /* border-top: 3px solid #feedc0c7; */
+    position: absolute;
+    bottom: -13px;
+    /* left: 0px; */
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    /* color: white; */
+    font-size: larger;
+
+}
+
+.clickMe,
+clickMe:hover,
+clickMe:focus,
+clickMe:active {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+
+.clickMe .noneLink{
+    color: inherit;
+        text-decoration: none;
+}

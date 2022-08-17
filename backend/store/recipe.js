@@ -16,4 +16,9 @@ const findByTags = (tags, tagsName, PAGE_SIZE, pageInt) => {
         .skip(PAGE_SIZE * pageInt)
 }
 
-module.exports = { saveRecipe, countRecipes, findByTags }
+const findOne = (id) => {
+    return Recipe.findById(id)
+
+}
+
+module.exports = { saveRecipe, countRecipes, findByTags, findOne }

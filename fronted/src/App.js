@@ -9,6 +9,7 @@ import Login from './components/login/Login';
 import NavbarTop from './components/navbar/NavbarTop';
 import CreateRecipe from './components/createRecipe/CreateRecipe';
 import Add from './components/add/add';
+import RecipePage from './components/recpiePage/RecipePage';
 
 
 
@@ -25,6 +26,7 @@ function App() {
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
             <Route path='/createRecipe' element={<CreateRecipe />} />
+            <Route path='/recpies/:id' element={<RecipePage />} />
             <Route path='/add' element={<Add />} />
             <Route path='/' element={<Home />} />
           </Routes>

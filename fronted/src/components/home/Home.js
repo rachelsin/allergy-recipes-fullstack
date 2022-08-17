@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { actions } from '../../redux/actions/action';
 import { Row, Pagination } from 'react-bootstrap';
 
+
 import RecipeCard from './RecipeCard';
 import Tags from '../createRecipe/Tags';
 import SearchTags from '../search/SearchTags';
@@ -22,17 +23,23 @@ const mapStateToProps = (state) => {
     return {
         recipes: state.recipe.recipesA,
         numberOfPages: state.recipe.numberOfPages,
+        historySearch: state.recipe.historySearch,
     };
 }
 const mapDispatchToProps = (dispatch) => ({
-    // getNewRecipes: (pageNumber) => dispatch(actions.getNewRecipes(pageNumber)),
     getRecipesByTags: ({ checked, pageNumber }) => dispatch(actions.getRecipesByTags({ checked, pageNumber })),
+    setSearch: ({ checked, pageNumber }) => dispatch(actions.setSearch({ pageNumber, checked })),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(function Home(props) {
+    const { recipes, numberOfPages, historySearch } = props;
 
     const [checked, setChecked] = useState([]);
-    const checkList = ["milk", "peanut", "egg", "soy", "tree nut", "wheat", "sesame", "fish"];
+    const [pageNumber, setPageNumber] = useState(0)
+    const [myHistorySearch, setMyHistorySearch] = useState(historySearch)
+
+    const pages = new Array(numberOfPages).fill(null).map((v, i) => i)
+
     const allergyFood = [
         { nameList: "milk", nameImage: milk, nameWrite: "Milk" },
         { nameList: "peanut", nameImage: peanuts, nameWrite: "Peanut" },
@@ -44,22 +51,44 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
         { nameList: "fish", nameImage: fish, nameWrite: "Fish" },
     ]
 
-    const { recipes, numberOfPages } = props;
 
-    const [pageNumber, setPageNumber] = useState(0)
+
+    // const checkList = ["milk", "peanut", "egg", "soy", "tree nut", "wheat", "sesame", "fish"];
     // const [numberOfPages, setNumberOfPages] = useState(0)
     // const [recipes, setRecipes] = useState([])
 
-    const pages = new Array(numberOfPages).fill(null).map((v, i) => i)
 
-    /*  useEffect(() => {
-         props.getNewRecipes(pageNumber)
- 
-     }, [pageNumber]) */
+    /*    useEffect(() => {
+           // let updatedList = [...checked];
+           if (myHistorySearch !== null) {
+               // updatedList = [...checked, myHistorySearch.tagsFreeOf];
+               setChecked(checked.concat(myHistorySearch.tagsFreeOf))
+               setPageNumber(myHistorySearch.pageIndex)
+               console.log('test');
+               setMyHistorySearch(null)
+               props.getRecipesByTags({ checked, pageNumber })
+           } else {
+               props.getRecipesByTags({ checked, pageNumber })
+           }
+   
+       }, [checked, pageNumber]) */
 
     useEffect(() => {
-        props.getRecipesByTags({ checked, pageNumber })
+        if (myHistorySearch !== null) {
+            setChecked(checked.concat(myHistorySearch.tagsFreeOf))
+            setPageNumber(myHistorySearch.pageIndex)
+            setMyHistorySearch(null)
+        }
+    }, [])
 
+    useEffect(() => {
+        if (myHistorySearch === null) {
+            props.getRecipesByTags({ checked, pageNumber })
+        }
+    }, [checked, pageNumber])
+
+    useEffect(() => {
+        props.setSearch({ checked, pageNumber })
     }, [checked, pageNumber])
 
     const gotoPrevious = () => {
@@ -75,12 +104,23 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
     const gotoEnd = () => {
         setPageNumber(numberOfPages - 1);
     }
+    const active = (pageIndex) => [
+        ((pageIndex + 1) === pageNumber + 1) ? "active" : "noneActive"
+    ]
 
+    const checkIf = (name) => {
+        if (historySearch !== null) {
+            if (checked.includes(name)) {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
     return (
         <>
             <div className='App'>
                 <div className='mb-3'>
-                    {/* <h3 className='mb-5'>Page of {pageNumber + 1}</h3> */}
                     <div className='row bg-l '>
                         <div className='col-12'>
                             {/* <SearchTags /> */}
@@ -88,6 +128,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
                                 checked={checked}
                                 setChecked={setChecked}
                                 allergyFood={allergyFood}
+                                myHistorySearch={myHistorySearch}
+                                setMyHistorySearch={setMyHistorySearch}
+                                checkIf={checkIf}
                             />
                         </div>
                     </div>
@@ -99,25 +142,31 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
                                 checkList={checkList} />
                         </div>
                     </div> */}
-                    <div className='mt-5'>
+                    <div className='m-5'>
                         <div className='m-auto'>
-                            <Row className="justify-content-md-center">
+                            <Row className="justify-content-md-center m-5">
                                 {recipes.length > 0 &&
                                     recipes.map(recip => {
                                         return (
-                                            <RecipeCard key={recip._id} recip={recip} />
+                                            <RecipeCard
+                                                key={recip._id}
+                                                recip={recip}
+                                            // checked={checked}
+                                            // pageNumber={pageNumber}
+                                            />
                                         )
                                     })
                                 }
                             </Row>
                         </div>
                     </div>
-                    <nav aria-label="Page navigation example">
-                        <ul className="pagination justify-content-center">
+                    <nav aria-label="Page navigation example mt-5">
+                        <ul className="pagination justify-content-center mt-5">
                             <Pagination.First onClick={gotoStart} />
                             <Pagination.Prev onClick={gotoPrevious} />
                             {pages.map(pageIndex => (
                                 <Pagination.Item
+                                    className={active(pageIndex)}
                                     key={pageIndex}
                                     onClick={() => setPageNumber(pageIndex)}>
                                     {pageIndex + 1}

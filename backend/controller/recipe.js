@@ -4,21 +4,28 @@ const Recipe = require('../model/recipe');
 const { saveRecipe, countRecipes, findByTags } = require('../store/recipe');
 
 const { PAGE_SIZE } = require('../config/config');
+const { findOne } = require('../model/user');
 
 // async ({ nameRecipe = { nameRecipe: req.body.nameRecip },description={description:req.body.description} }, res) =>
 // async ({ nameRecipe : { nameRecipe: req.body.nameRecip },description:{description:req.body.description} }, res) =>
 
 // function Add a recipe 
-const addRecipe = async ({body: {nameRecipe, description,...body}}, res) => {
-    try {
-        const {  recipeImage, author, tagsFreeOf, ingredients, preparation, user_id } = body;
+// const addRecipe = async ({ body: { nameRecipe, description, ...body }, file }, res) => {
 
-        const defaultImage = "https://cdn.pixabay.com/photo/2017/10/22/21/41/turmeric-2879382_960_720.jpg";
+const addRecipe = async (req, res) => {
+    try {
+        const { nameRecipe, description, author, tagsFreeOf, ingredients, preparation, user_id } = req.body;
+        // console.log('req.file', req.body);
+        // const { nameRecipe } = req.body;
+        // const  path  = req.file.path;
+        // const defaultImage = "https://cdn.pixabay.com/photo/2017/10/22/21/41/turmeric-2879382_960_720.jpg";
 
         const newRecipe = new Recipe({
             nameRecipe,
             description,
-            recipeImage: recipeImage ? recipeImage : defaultImage,
+            // recipeImage: recipeImage ? recipeImage : defaultImage,
+            // recipeImage: req.file.path.replace('\\', '/'),
+            // recipeImage: `uploads\\${req.file.name}`,
             author,
             tagsFreeOf,
             ingredients,
@@ -27,9 +34,9 @@ const addRecipe = async ({body: {nameRecipe, description,...body}}, res) => {
         })
         console.log(newRecipe);
 
-        const recipe = await saveRecipe(newRecipe);
-        // const recipe = await newRecipe.save();
-        console.log(recipe);
+        // const recipe = await saveRecipe(newRecipe);
+        const recipe = await newRecipe.save();
+        // console.log(recipe);
         res.json({ status: 200 })
         console.log('succes create new recipe');
 
@@ -39,28 +46,8 @@ const addRecipe = async ({body: {nameRecipe, description,...body}}, res) => {
     }
 }
 
-const recpies_get_all = async (req, res, next) => {
-    /* 
-        try {
-            const PAGE_SIZE = 3;
-            const page = parseInt(req.query.page || "0");
-            const total = await Recipe.countDocuments({});
-    
-            const recipes = await Recipe.find().sort({ date: -1 })
-                .limit(PAGE_SIZE)
-                .skip(PAGE_SIZE * page)
-            res.status(200).send({
-                recipes,
-                totalPages: Math.ceil(total / PAGE_SIZE)
-            });
-        } catch (error) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        } */
-};
-const search_by_tags = async (req, res) => {
+
+const searchByTags = async (req, res) => {
     try {
         const { tags, page } = req.query;
         const tagsName = tags.split(' ');
@@ -86,7 +73,34 @@ const search_by_tags = async (req, res) => {
     }
 };
 
+const getRecipe = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log('ff');
+        const recpie = await Recipe.findOne({ _id: id })
+        // if (!recpie)
+        //     return res.status(404).send("The recpie with the given ID was not found.");
+        res.status(200).json({
+            recpie: recpie
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(400).send(err.message)
+    }
+}
+
+const get_recpie = async (req, res) => {
+    try {
+        const { id } = req.params
+        console.log(id);
+        const recipe = await Recipe.findById(id)
+        console.log(recipe);
+    } catch (err) {
+        console.log(err)
+        res.status(400).send(err.message)
+    }
+}
 
 
 
-module.exports = { addRecipe, recpies_get_all, search_by_tags }
+module.exports = { addRecipe, searchByTags, getRecipe, get_recpie }

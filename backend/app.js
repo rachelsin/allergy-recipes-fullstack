@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+// const cors = require("cors");
 dotenv.config();
 const router = require('./routes/api');
 
@@ -19,7 +20,7 @@ mongoose.connect(process.env.DB_CONECCT, connectionParams)
     .catch((err) => {
         console.error(`Error connecting to the database. ${err}`);
     });
-
+// app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/', router)

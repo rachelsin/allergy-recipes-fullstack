@@ -33,6 +33,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
 
     const [dataIngredients, setDataIngredients] = useState([])
 
+    const [image, setImage] = useState({});
+
+
 
     ///////////////
     const recipeNameRef = useRef('');
@@ -42,7 +45,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
         e.preventDefault();
         let data = {
             nameRecipe: recipeNameRef.current.value,
-            recipeImage: recipeImageRef.current.value,
+            // recipeImage: recipeImageRef.current.value,
+            recipeImage: image,
             tagsFreeOf: checked,
             description: descriptionRef.current.value,
             // ingredients: contacts,
@@ -99,7 +103,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(function CreateRecip
                             {/*   <IngredientFather
                                 ingredientData={ingredientData}
                                 setIngredientData={setIngredientData} /> */}
-                            <Image />
+                            <Image
+                                image={image}
+                                setImage={setImage}
+                            />
                         </div>
                     </div>
                     <div className='row'>
