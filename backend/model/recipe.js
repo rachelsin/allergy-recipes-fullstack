@@ -3,29 +3,25 @@ const mongoose = require('mongoose');
 
 const RecipeSchema = mongoose.Schema({
     nameRecipe: {
-        type: String
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 255
     },
     description: {
-        type: String
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 1024
     },
     recipeImage: {
-        // data: Buffer,
-        // contentType: String,
         type: String
     },
-    author: {
-        type: mongoose.Types.ObjectId, ref: 'User'
-    },
-    date: {
-        type: Date,
-        default: Date.now
-    },
     tagsFreeOf: {
-        type: Array
+        type: Array,
+        required: true,
+        minlength: 1,
     },
-    likes: [
-        { type: mongoose.Types.ObjectId, ref: 'User' }
-    ],
     ingredients: [
         {
             qty: String,
@@ -34,9 +30,23 @@ const RecipeSchema = mongoose.Schema({
         }
     ],
     preparation: {
-        type: Array
+        type: Array,
+        
     },
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    author: {
+        type: mongoose.Types.ObjectId, ref: 'User'
+    },
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    likes: [
+        { type: mongoose.Types.ObjectId, ref: 'User' }
+    ],
+
 })
 
 module.exports = mongoose.model('Recipe', RecipeSchema);

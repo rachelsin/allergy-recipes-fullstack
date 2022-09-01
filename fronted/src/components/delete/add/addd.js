@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux';
-import { actions } from '../../redux/actions/action';
-import RecipeCard from '../home/RecipeCard'
+import { actions } from '../../../redux/actions/action';
+import RecipeCard from '../../home/RecipeCard'
 import { Row } from 'react-bootstrap';
 
 const mapStateToProps = (state) => {

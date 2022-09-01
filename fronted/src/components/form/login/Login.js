@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { actions } from '../../redux/actions/action';
+import { actions } from '../../../redux/actions/action';
 import { useNavigate } from "react-router-dom";
 
 const mapStateToProps = (state) => {
@@ -8,7 +8,6 @@ const mapStateToProps = (state) => {
         userName: state.user.user.userName,
     };
 }
-
 
 const mapDispatchToProps = (dispatch) => ({
     login: (data) => dispatch(actions.login(data)),

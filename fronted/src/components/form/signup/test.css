@@ -1,0 +1,12 @@
+.aaa {
+    display: flex;
+    align-items: center;
+    padding-bottom: 40px;
+    background-color: #F7FAFC;
+    height: 92.5vh;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+}

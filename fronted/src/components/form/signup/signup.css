@@ -1,0 +1,39 @@
+/* .divSignup {
+    background-color: #fff;
+    box-shadow: rgb(79 79 106 / 6%) 0px 0px 12px;
+    border-radius: 12px;
+    padding-top: 25px;
+    margin: 35px auto 0px;
+    flex: 1 0 auto;
+    max-width: 500px;
+    width: 100%;
+    padding-bottom: 100px;
+} */
+
+.signupBackground {
+    background-color: #F7FAFC;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    /* padding-bottom: 40px; */
+    height: 92.5vh;
+}
+
+.divSignup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    /* max-width: 500px; */
+    /* color: #17D4FE; */
+    /* font-size: 60px; */
+    /* font-family: Orbitron; */
+    /* letter-spacing: 7px; */
+}
+
+.letterSpacing5 {
+    /* position: relative; */
+    letter-spacing: 7px
+}

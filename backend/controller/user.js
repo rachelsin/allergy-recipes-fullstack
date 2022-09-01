@@ -7,6 +7,11 @@ dotenv.config();
 const signup = async (req, res) => {
     const newUser = new User(req.body)
     try {
+        /*      const findUser = await User.findOne({ email: req.body.email });
+             if (findUser) return res.status(400).render("User already registered."); */
+        // Todo - rachel
+
+
         const user = await newUser.save();
         console.log(user);
         res.json({ status: 200 })
@@ -14,7 +19,7 @@ const signup = async (req, res) => {
 
     } catch (err) {
         console.log(err)
-        res.status(400).send(err.message)
+        res.status(400).render('error', { error: err })
     }
 }
 
@@ -41,7 +46,7 @@ const login = async (req, res) => {
 const userData = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        res.send(user);
+        res.send(user.name, user.email);
         console.log('sucsses');
     }
     catch (err) {

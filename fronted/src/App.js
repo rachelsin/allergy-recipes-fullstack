@@ -1,34 +1,44 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import store from "./redux/store/store";
 import { Provider } from 'react-redux'
-import Signup from './components/signup/Signup';
+import Signup from './components/form/signup/Signup'
 import Home from './components/home/Home';
-import Login from './components/login/Login';
+import Login from './components/form/login/Login';
 import NavbarTop from './components/navbar/NavbarTop';
-import CreateRecipe from './components/createRecipe/CreateRecipe';
-import Add from './components/add/add';
+import NavTop from './components/navbar/NavTop';
 import RecipePage from './components/recpiePage/RecipePage';
+import AddRecipe from './components/form/addRecipe/AddRecipe';
+// import Test from './components/signup/Test';
+// import Testsearch from './components/search/testparams';
+// import Add from './components/add/add';
+// import CreateRecipe from './components/createRecipe/CreateRecipe';
 
 
 
 function App() {
   return (
     <Provider store={store}>
+      <ToastContainer />
       <Router>
         <header>
-          <NavbarTop />
+          {/* <NavbarTop /> */}
+          <NavTop />
         </header>
         <main>
           {/* <div className="App"> */}
           <Routes>
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/createRecipe' element={<CreateRecipe />} />
+            <Route path='/addRecipe' element={<AddRecipe />} />
             <Route path='/recpies/:id' element={<RecipePage />} />
-            <Route path='/add' element={<Add />} />
             <Route path='/' element={<Home />} />
+            {/* <Route path='/test' element={<Test />} /> */}
+            {/* <Route path='/testsearch' element={<Testsearch />} /> */}
+            {/* <Route path='/createRecipe' element={<CreateRecipe />} /> */}
           </Routes>
           {/* </div> */}
         </main>

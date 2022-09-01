@@ -36,12 +36,10 @@ export default function Preparation(props) {
 
     return (
         <>
-            <p> Preparation: </p>
-            <p> Add the preparation steps, each step added separately: </p>
-
+            <label><h5> Preparation: </h5></label>
             <div className='row'>
-                <input type="text" className="form-control col m-2 " placeholder="step" ref={stepRef} />
-                <button className='btn col btn-danger col-1 m-2' onClick={addLine}>add</button>
+                <input type="text" className="form-control col m-2 " placeholder="Add the preparation steps, each step added separately" ref={stepRef} />
+                <button className='btn col btn-danger col-1 m-2' onClick={() => addLine()}>add</button>
             </div>
             <ul>
                 {datapre ?

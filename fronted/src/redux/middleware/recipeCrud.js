@@ -3,15 +3,65 @@ import { actions } from "../actions/action";
 export const recipeCrud = ({ dispatch, getState }) => next => action => {
     const myHeaders = new Headers();
     // myHeaders.append("Content-Type", "application/json");
-    /* if (action.type === 'ADD_RECIPE') {
-        const raw = JSON.stringify({
+
+    /*  if (action.type === 'ADD_RECIPE') {
+         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+ 
+         let formdata = new FormData();
+         formdata.append("nameRecipe", action.payload.nameRecipe);
+         formdata.append("tagsFreeOf", action.payload.tagsFreeOf);
+         formdata.append("description", action.payload.description);
+         formdata.append("ingredients", action.payload.ingredients);
+         formdata.append("preparation", action.payload.preparation);
+         // formdata.append("user_id", getState().user.user.id);
+         formdata.append("recipeImage", action.payload.recipeImage);
+ 
+         const requestOptions = {
+             method: 'POST',
+             headers: myHeaders,
+             body: formdata,
+             redirect: 'follow'
+         };
+ 
+         fetch("http://localhost:5001/addRecipe", requestOptions)
+             .then(response => response.json())
+             .then(result => console.log(result))
+             .catch(error => console.log('error', error));
+         console.log(formdata);
+     } */
+    /*   if (action.type === 'ADD_RECIPE') {
+          let raw = JSON.stringify({
+              "nameRecipe": action.payload.nameRecipe,
+              "tagsFreeOf": action.payload.tagsFreeOf,
+              "description": action.payload.description,
+              "ingredients": action.payload.ingredients,
+              "preparation": action.payload.preparation,
+              "recipeImage": action.payload.recipeImage,
+              "user_id": getState().user.user.id
+          });
+  
+          const requestOptions = {
+              method: 'POST',
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow'
+          };
+          fetch("http://localhost:5001/addRecipe", requestOptions)
+              .then(response => response.json())
+              .then(result => console.log(result))
+              .catch(error => console.log('error', error));
+      } */
+    if (action.type === 'ADD_NEW_RECIPE') {
+        myHeaders.append("Content-Type", "application/json");
+        console.log(getState().user.userId);
+        let raw = JSON.stringify({
             "nameRecipe": action.payload.nameRecipe,
             "tagsFreeOf": action.payload.tagsFreeOf,
             "description": action.payload.description,
             "ingredients": action.payload.ingredients,
             "preparation": action.payload.preparation,
             "recipeImage": action.payload.recipeImage,
-            "user_id": getState().user.user.id
+            "user_id": getState().user.userId
         });
 
         const requestOptions = {
@@ -22,33 +72,14 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
         };
         fetch("http://localhost:5001/addRecipe", requestOptions)
             .then(response => response.json())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-    } */
-    if (action.type === 'ADD_RECIPE') {
-        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-        let formdata = new FormData();
-        formdata.append("nameRecipe", action.payload.nameRecipe);
-        formdata.append("tagsFreeOf", action.payload.tagsFreeOf);
-        formdata.append("description", action.payload.description);
-        formdata.append("ingredients", action.payload.ingredients);
-        formdata.append("preparation", action.payload.preparation);
-        // formdata.append("user_id", getState().user.user.id);
-        formdata.append("recipeImage", action.payload.recipeImage);
-
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:5001/addRecipe", requestOptions)
-            .then(response => response.json())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        console.log(formdata);
+            .then(result => {
+                console.log(result);
+                dispatch(actions.setSucceededAddRecipe(true))
+            })
+            .catch(error => {
+                console.log('error', error);
+                dispatch(actions.setSucceededAddRecipe(false))
+            });
     }
     if (action.type === 'GET_ALL_RECIPES') {
         myHeaders.append("Content-Type", "application/json");
@@ -89,15 +120,19 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
         //     method: 'GET',
         //     redirect: 'follow'
         // };
-        const { checked, pageNumber } = action.payload;
+        const { tags, page } = action.payload;
+        console.log(action.payload);
         let searchString;
-        if (typeof checked === 'undefined') {
-            searchString = checked;
+        if (tags === '' || typeof tags === 'undefined' || tags === null) {
+            searchString = ""
+            console.log(searchString);
         } else {
-            searchString = checked.join('+');
+            searchString = tags.join('+');
+            console.log('arr');
         }
-        console.log(searchString, pageNumber);
-        fetch(`http://localhost:5001/recipes/search/?tags=${searchString}&page=0${pageNumber}`)
+        console.log(page);
+        // console.log(searchString, pageNumber);
+        fetch(`http://localhost:5001/recipes/search/?tags=${searchString}&page=0${page}`)
 
             /*  let x = `/?tags=${searchString}&page=0${pageNumber}` */
             .then((response) => response.json())

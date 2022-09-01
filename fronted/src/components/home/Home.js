@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { Row, Pagination, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/actions/action';
-import { Row, Pagination } from 'react-bootstrap';
 
-
-import RecipeCard from './RecipeCard';
-import Tags from '../createRecipe/Tags';
-import SearchTags from '../search/SearchTags';
-import SearchTagImage from '../search/SearchTagImage';
+import RecipeCard from '../recipeCard/RecipeCard';
+import './searchTag.css'
 
 import eggs from '../../images/eggs.png'
 import fish from '../../images/fish.png'
@@ -18,27 +17,29 @@ import sesame from '../../images/sesame.png'
 import soya from '../../images/soya.png'
 import wheat from '../../images/wheat.png'
 
-
 const mapStateToProps = (state) => {
     return {
         recipes: state.recipe.recipesA,
         numberOfPages: state.recipe.numberOfPages,
-        historySearch: state.recipe.historySearch,
     };
 }
 const mapDispatchToProps = (dispatch) => ({
-    getRecipesByTags: ({ checked, pageNumber }) => dispatch(actions.getRecipesByTags({ checked, pageNumber })),
-    setSearch: ({ checked, pageNumber }) => dispatch(actions.setSearch({ pageNumber, checked })),
+    getRecipesByTags: ({ tags, page }) => dispatch(actions.getRecipesByTags({ tags, page })),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(function Home(props) {
-    const { recipes, numberOfPages, historySearch } = props;
-
-    const [checked, setChecked] = useState([]);
+    const { recipes, numberOfPages } = props;
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { register, watch, setValue } = useForm();
+    const tagsAllergy = watch("tagsFreeOf");
     const [pageNumber, setPageNumber] = useState(0)
-    const [myHistorySearch, setMyHistorySearch] = useState(historySearch)
-
     const pages = new Array(numberOfPages).fill(null).map((v, i) => i)
+
+    useEffect(() => {
+        if (numberOfPages < pageNumber + 1) {
+            setPageNumber(0)
+        }
+    }, [numberOfPages])
 
     const allergyFood = [
         { nameList: "milk", nameImage: milk, nameWrite: "Milk" },
@@ -51,45 +52,40 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
         { nameList: "fish", nameImage: fish, nameWrite: "Fish" },
     ]
 
-
-
-    // const checkList = ["milk", "peanut", "egg", "soy", "tree nut", "wheat", "sesame", "fish"];
-    // const [numberOfPages, setNumberOfPages] = useState(0)
-    // const [recipes, setRecipes] = useState([])
-
-
-    /*    useEffect(() => {
-           // let updatedList = [...checked];
-           if (myHistorySearch !== null) {
-               // updatedList = [...checked, myHistorySearch.tagsFreeOf];
-               setChecked(checked.concat(myHistorySearch.tagsFreeOf))
-               setPageNumber(myHistorySearch.pageIndex)
-               console.log('test');
-               setMyHistorySearch(null)
-               props.getRecipesByTags({ checked, pageNumber })
-           } else {
-               props.getRecipesByTags({ checked, pageNumber })
-           }
-   
-       }, [checked, pageNumber]) */
-
     useEffect(() => {
-        if (myHistorySearch !== null) {
-            setChecked(checked.concat(myHistorySearch.tagsFreeOf))
-            setPageNumber(myHistorySearch.pageIndex)
-            setMyHistorySearch(null)
+        if (tagsAllergy) {
+            let newTags = [...tagsAllergy];
+            let tags = newTags.join(" ");
+            setSearchParams({ tags, page: pageNumber || 0 })
+        } else if (pageNumber >= 0) {
+            setSearchParams({ tags: "", page: pageNumber || 0 })
         }
-    }, [])
+    }, [pageNumber, tagsAllergy])
 
     useEffect(() => {
-        if (myHistorySearch === null) {
-            props.getRecipesByTags({ checked, pageNumber })
+        if (searchParams) {
+            let searchTags = searchParams.get('tags')
+            let searchPage = searchParams.get('page')
+
+            let page;
+            if (searchPage) {
+                page = parseInt(searchPage)
+            } else {
+                page = 0;
+            }
+
+            let tags;
+            if (searchTags) {
+                tags = searchTags.split(" ");
+                setValue("tagsFreeOf", tags)
+            } else {
+                tags = searchTags;
+            }
+            setValue("tagsFreeOf", tags)
+            setPageNumber(page)
+            props.getRecipesByTags({ tags, page })
         }
-    }, [checked, pageNumber])
-
-    useEffect(() => {
-        props.setSearch({ checked, pageNumber })
-    }, [checked, pageNumber])
+    }, [searchParams])
 
     const gotoPrevious = () => {
         setPageNumber(Math.max(0, pageNumber - 1));
@@ -104,81 +100,83 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
     const gotoEnd = () => {
         setPageNumber(numberOfPages - 1);
     }
+
     const active = (pageIndex) => [
-        ((pageIndex + 1) === pageNumber + 1) ? "active" : "noneActive"
+        (pageIndex === pageNumber) ? "active" : "noneActive"
     ]
+    const styles = {
+        width: '5rem',
+        border: "3px solid #feedc0c7"
+    };
 
-    const checkIf = (name) => {
-        if (historySearch !== null) {
-            if (checked.includes(name)) {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
     return (
-        <>
-            <div className='App'>
-                <div className='mb-3'>
-                    <div className='row bg-l '>
-                        <div className='col-12'>
-                            {/* <SearchTags /> */}
-                            <SearchTagImage
-                                checked={checked}
-                                setChecked={setChecked}
-                                allergyFood={allergyFood}
-                                myHistorySearch={myHistorySearch}
-                                setMyHistorySearch={setMyHistorySearch}
-                                checkIf={checkIf}
-                            />
-                        </div>
-                    </div>
-                    {/* <div className='row border'>
+        <div className='bg-l'>
+            <div className='mb-3'>
+                <div className='bg-l2 bb m-auto'>
+                    <Row className="justify-content-md-center">
+                        <Col md="auto" className=''>
+                            {allergyFood.map((item, index) => (
+                                <label className="option_item mx-3 " key={index}>
+                                    <input value={item.nameList} type="checkbox" className="checkbox"
 
-                         <div className='col'>
-                            <Tags checked={checked}
-                                setChecked={setChecked}
-                                checkList={checkList} />
-                        </div>
-                    </div> */}
-                    <div className='m-5'>
-                        <div className='m-auto'>
-                            <Row className="justify-content-md-center m-5">
-                                {recipes.length > 0 &&
-                                    recipes.map(recip => {
-                                        return (
-                                            <RecipeCard
-                                                key={recip._id}
-                                                recip={recip}
-                                            // checked={checked}
-                                            // pageNumber={pageNumber}
-                                            />
-                                        )
-                                    })
-                                }
-                            </Row>
-                        </div>
-                    </div>
-                    <nav aria-label="Page navigation example mt-5">
-                        <ul className="pagination justify-content-center mt-5">
-                            <Pagination.First onClick={gotoStart} />
-                            <Pagination.Prev onClick={gotoPrevious} />
-                            {pages.map(pageIndex => (
-                                <Pagination.Item
-                                    className={active(pageIndex)}
-                                    key={pageIndex}
-                                    onClick={() => setPageNumber(pageIndex)}>
-                                    {pageIndex + 1}
-                                </Pagination.Item>
+                                        {...register("tagsFreeOf")}
+                                    />
+                                    <div className="option_inner" >
+                                        <div className="tickmark">
+                                            <div className="line"></div>
+                                        </div>
+                                        <div className="image">
+                                            <img src={item.nameImage} style={styles} className='rounded-circle mx-3 my-1' />
+                                        </div>
+                                        <div className="name mb-3">{item.nameWrite}</div>
+                                    </div>
+                                </label>
+
                             ))}
-                            <Pagination.Next onClick={gotoNext} />
-                            <Pagination.Last onClick={gotoEnd} />
-                        </ul>
-                    </nav>
+                        </Col>
+                    </Row>
                 </div>
+                {recipes.length > 1 ?
+                    <>
+                        <div className='m-5' >
+                            <div className='m-auto'>
+                                <Row className="justify-content-md-center m-5">
+                                    {recipes.length > 0 &&
+                                        recipes.map(recipeItem => {
+                                            return (
+                                                <RecipeCard
+                                                    key={recipeItem._id}
+                                                    recipeItem={recipeItem}
+                                                />
+                                            )
+                                        })
+                                    }
+                                </Row>
+                            </div>
+                        </div>
+                        <nav aria-label="Page navigation example mt-5">
+                            <ul className="pagination justify-content-center mt-5">
+                                <Pagination.First onClick={gotoStart} />
+                                <Pagination.Prev onClick={gotoPrevious} />
+                                {pages.map(pageIndex => (
+                                    <Pagination.Item
+                                        className={active(pageIndex)}
+                                        key={pageIndex}
+                                        onClick={() => setPageNumber(pageIndex)}>
+                                        {pageIndex + 1}
+                                    </Pagination.Item>
+                                ))}
+                                <Pagination.Next onClick={gotoNext} />
+                                <Pagination.Last onClick={gotoEnd} />
+                            </ul>
+                        </nav>
+                    </>
+                    :
+                    <div className='bg-l2 bb m-auto text-center pt-4'>
+                        <p>soory, but no found recipe...</p>
+                    </div>
+                }
             </div>
-        </>
-    )
-}
-)
+        </div>
+    );
+})

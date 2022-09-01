@@ -14,19 +14,20 @@ const { findOne } = require('../model/user');
 
 const addRecipe = async (req, res) => {
     try {
-        const { nameRecipe, description, author, tagsFreeOf, ingredients, preparation, user_id } = req.body;
+        const { nameRecipe, description, tagsFreeOf, ingredients, preparation, user_id, recipeImage } = req.body;
         // console.log('req.file', req.body);
         // const { nameRecipe } = req.body;
         // const  path  = req.file.path;
         // const defaultImage = "https://cdn.pixabay.com/photo/2017/10/22/21/41/turmeric-2879382_960_720.jpg";
-
+        // author0
         const newRecipe = new Recipe({
             nameRecipe,
             description,
+            recipeImage,
             // recipeImage: recipeImage ? recipeImage : defaultImage,
             // recipeImage: req.file.path.replace('\\', '/'),
             // recipeImage: `uploads\\${req.file.name}`,
-            author,
+            // author,
             tagsFreeOf,
             ingredients,
             preparation,

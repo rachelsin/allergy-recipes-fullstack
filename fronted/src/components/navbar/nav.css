@@ -1,3 +1,12 @@
 .bg-l {
-    background: #F7F7F7;
+    background: #F7FAFC;
+}
+
+.bg-l2 {
+    background: #ffffff;
+}
+
+.bb {
+    /* border-bottom: 2px #dcecf7 solid; */
+    /* box-shadow: rgb(79 79 106 / 6%) 0px 0px 12px; */
 }

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import { Button, Card, Col } from 'react-bootstrap';
+
 
 import eggs from '../../images/eggs.png'
 import fish from '../../images/fish.png'
@@ -61,34 +63,29 @@ export default function SearchTagImage(props) {
         border: "3px solid #feedc0c7"
     };
     return (
-        <div className="app ">
-            <div className="checkList row">
-                {/* <div className="title">Free of:</div> */}
-                <div className="app ">
-                    {allergyFood.map((item, index) => (
 
-                        <label className="option_item mx-3 " key={index}>
-                            <input value={item.nameList} type="checkbox" onChange={handleCheck} className="checkbox"
-                                checked={checkIf(item.nameList)}
-                            />
-                            <div className="option_inner" >
-                                <div className="tickmark">
-                                    <div className="line"></div>
-                                </div>
-                                <div className="image">
-                                    <img src={item.nameImage} style={styles} className='rounded-circle mx-3 my-1' />
-                                </div>
-                                <div className="name mb-3">{item.nameWrite}</div>
-                            </div>
-                        </label>
+        <Col md="auto" className=''>
+            {allergyFood.map((item, index) => (
 
-                    ))}
-                </div>
-            </div >
-            {/*  <div>
-                {`Items checked are: ${checkedItems}`}
-            </div> */}
-        </div >
+                <label className="option_item mx-3 " key={index}>
+                    <input value={item.nameList} type="checkbox" onChange={handleCheck} className="checkbox"
+                        checked={checkIf(item.nameList)}
+                    />
+                    <div className="option_inner" >
+                        <div className="tickmark">
+                            <div className="line"></div>
+                        </div>
+                        <div className="image">
+                            <img src={item.nameImage} style={styles} className='rounded-circle mx-3 my-1' />
+                        </div>
+                        <div className="name mb-3">{item.nameWrite}</div>
+                    </div>
+                </label>
+
+            ))}
+        </Col>
+
+
     );
 }
 

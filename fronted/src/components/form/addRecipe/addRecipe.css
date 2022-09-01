@@ -1,0 +1,77 @@
+/* .divBackground {
+    background-color: #F7FAFC;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    padding-bottom: 40px;
+}
+
+.backgroundInDiv {
+    background-color: #fff;
+    box-shadow: rgb(79 79 106 / 6%) 0px 0px 12px;
+    border-radius: 12px;
+    padding-top: 25px;
+    margin: 35px auto 0px;
+    flex: 1 0 auto;
+    max-width: 960px;
+    width: 100%;
+    /* background-color: rgb(255, 255, 255); /*
+padding-bottom: 100px;
+}
+*/
+
+.cssForm {
+    width: 100%;
+    margin: 0px auto;
+    max-width: 540px;
+    padding: 40px 0px;
+}
+
+.errorSpan {
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    color: #ee4055;
+    min-height: 25px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    font-size: 14px;
+    line-height: 22px;
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: flex-start;
+    -webkit-box-align: flex-start;
+    -ms-flex-align: flex-start;
+    align-items: flex-start;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    color: #ee4055;
+    min-height: 25px;
+    padding-bottom: 3px;
+}
+
+.descriptionSpan {
+
+    color: #bca39e;
+    min-height: 25px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    font-size: 14px;
+    line-height: 22px;
+    width: 100%;
+    /* display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; */
+
+    min-height: 25px;
+    padding-bottom: 3px;
+}

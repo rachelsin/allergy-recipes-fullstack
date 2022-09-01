@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { actions } from '../../redux/actions/action';
+import jwtDecode from "jwt-decode";
 
 import localStorageFunction from "../../services/localStorage";
 
@@ -17,15 +18,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     setRemoveUser: () => dispatch(actions.setRemoveUser()),
     getDataUser: (userId) => dispatch(actions.getDataUser(userId)),
+    setUserId: (id) => dispatch(actions.setUserId(id)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(function NavbarTop(props) {
+export default connect(mapStateToProps, mapDispatchToProps)(function NavTop(props) {
     const { userName } = props;
     const [user, setUser] = useState()
     const [userId, setUserId] = useState()
 
 
-    useEffect(() => {
+    /* useEffect(() => {
         const data = localStorageFunction.getCurrentUser()
         if (data) {
             setUserId(data.id)
@@ -34,16 +36,30 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavbarTop(p
             }
         }
 
-    }, []);
+    }, []); */
+    useEffect(() => {
+        if (userId) {
+            console.log('dd');
+            // setUserId(jwtDecode(user))
+        }
+    }, [userId]);
 
     useEffect(() => {
         const userToken = localStorageFunction.getJwt()
-        setUser(userToken);
+        if (userToken) {
+            setUser(userToken);
+            let id = jwtDecode(userToken)
+            setUserId(id)
+            props.setUserId(id)
+        }
+
+
     }, [user, userName]);
 
     function handelLogout() {
         localStorageFunction.logout()
         setUser(null)
+        setUserId(null)
         props.setRemoveUser()
     }
 
@@ -75,7 +91,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavbarTop(p
 
                             {user &&
                                 <>
-                                    <Navbar.Text className="mx-2">Hi,{userName} </Navbar.Text>
                                     <div className="col-4 align-self-center">
                                         <button type="button" className="btn btn-sm btn-outline-secondary" onClick={handelLogout} >Logout</button>
                                     </div>

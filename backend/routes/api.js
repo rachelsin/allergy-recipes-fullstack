@@ -11,9 +11,10 @@ const fs = require('fs');
 // api user
 router.post('/signup', user.signup);
 router.post('/login', user.login);
+router.post('/userData/:id', user.userData);
 
-router.post('/addRecipe', upload.single('recipeImage'), recipe.addRecipe);
-// router.post('/addRecipe', recipe.addRecipe);
+// router.post('/addRecipe', upload.single('recipeImage'), recipe.addRecipe);
+router.post('/addRecipe', recipe.addRecipe);
 router.get('/recpies/:id', recipe.get_recpie);
 
 
