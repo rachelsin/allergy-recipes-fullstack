@@ -76,7 +76,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavTop(prop
                             navbarScroll
                         >
                             <NavLink className="nav-link" to="/">Home</NavLink>
-                            <NavLink className="nav-link" to="/addRecipe">Add a Recipe</NavLink>
+                            {user &&
+                                <NavLink className="nav-link" to="/addRecipe">Add a Recipe</NavLink>
+                            }
+
 
                         </Nav>
 
@@ -94,6 +97,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavTop(prop
                                     <div className="col-4 align-self-center">
                                         <button type="button" className="btn btn-sm btn-outline-secondary" onClick={handelLogout} >Logout</button>
                                     </div>
+                                    <NavLink className="nav-link" to="/logout">logout</NavLink>
                                 </>
                             }
 
