@@ -57,7 +57,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
             let newTags = [...tagsAllergy];
             let tags = newTags.join(" ");
             setSearchParams({ tags, page: pageNumber })
-        } else if (pageNumber >= 0 && tagsAllergy === null) {
+        } else if (pageNumber >= 0 && tagsAllergy === '') {
             setSearchParams({ tags: "", page: pageNumber })
         }
     }, [pageNumber, tagsAllergy])
