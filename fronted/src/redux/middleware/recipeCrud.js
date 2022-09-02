@@ -1,4 +1,5 @@
 import { actions } from "../actions/action";
+import localStorageFunction from "../../services/localStorage";
 
 export const recipeCrud = ({ dispatch, getState }) => next => action => {
     const myHeaders = new Headers();
@@ -52,8 +53,11 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
               .catch(error => console.log('error', error));
       } */
     if (action.type === 'ADD_NEW_RECIPE') {
+        const token = localStorageFunction.getJwt();
+        myHeaders.append("x-auth-token", token);
         myHeaders.append("Content-Type", "application/json");
-        console.log(getState().user.userId);
+
+        // console.log(getState().user.userId);
         let raw = JSON.stringify({
             "nameRecipe": action.payload.nameRecipe,
             "tagsFreeOf": action.payload.tagsFreeOf,

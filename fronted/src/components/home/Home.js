@@ -56,9 +56,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
         if (tagsAllergy) {
             let newTags = [...tagsAllergy];
             let tags = newTags.join(" ");
-            setSearchParams({ tags, page: pageNumber || 0 })
-        } else if (pageNumber >= 0) {
-            setSearchParams({ tags: "", page: pageNumber || 0 })
+            setSearchParams({ tags, page: pageNumber })
+        } else if (pageNumber >= 0 && tagsAllergy === null) {
+            setSearchParams({ tags: "", page: pageNumber })
         }
     }, [pageNumber, tagsAllergy])
 
@@ -83,6 +83,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
             }
             setValue("tagsFreeOf", tags)
             setPageNumber(page)
+            console.log(tags, page, 'oooo')
             props.getRecipesByTags({ tags, page })
         }
     }, [searchParams])

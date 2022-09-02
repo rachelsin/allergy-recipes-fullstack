@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import store from "./redux/store/store";
 import { Provider } from 'react-redux'
-import PrivateRoute from './services/privateRoute';
+// import PrivateRoute from './services/privateRoute';
 import Signup from './components/form/signup/Signup'
 import Home from './components/home/Home';
 import Login from './components/form/login/Login';
@@ -39,9 +39,9 @@ function App() {
             <Route path='/recpies/:id' element={<RecipePage />} />
             <Route path='/' element={<Home />} />
             <Route path='/logout' element={<Logout />} />
-            <Route exact path='/' element={<PrivateRoute />}>
-              <Route path='/addRecipe' element={<AddRecipe />} />
-            </Route>
+            {/* <Route exact path='/' element={<PrivateRoute />}> */}
+            <Route path='/addRecipe' element={<AddRecipe />} />
+            {/* </Route> */}
             {/* <Route path='/test' element={<Test />} /> */}
             {/* <Route path='/testsearch' element={<Testsearch />} /> */}
             {/* <Route path='/createRecipe' element={<CreateRecipe />} /> */}

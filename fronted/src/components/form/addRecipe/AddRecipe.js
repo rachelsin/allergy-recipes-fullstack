@@ -115,7 +115,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
                 ingredients: dataIngredients,
                 preparation: dataPreparation
             }
-            console.log(dataRecipe);
+            console.log('data recipe', dataRecipe);
             props.addRecipe(dataRecipe)
 
         } else {
