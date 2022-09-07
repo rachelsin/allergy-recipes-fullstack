@@ -35,10 +35,13 @@ export const userCrud = ({ dispatch, getState }) => next => action => {
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem("token", data.token);
-                console.log(data.cheackSign);
-                dispatch(actions.setUser(data.cheackSign));
+                dispatch(actions.setSucceededLogin(null));
+                dispatch(actions.setUser(data.user));
             })
-            .catch(err => console.log('error:', err));
+            .catch(error => {
+                console.log('error', error);
+                dispatch(actions.setSucceededLogin('Invalid email or password.'))
+            });
     }
     return next(action);
 }

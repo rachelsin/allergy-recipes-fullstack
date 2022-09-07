@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const mapStateToProps = (state) => {
     return {
         userName: state.user.user.userName,
+        loginStatus: state.user.login,
     };
 }
 
@@ -14,6 +15,12 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(function Login(props) {
+    const { loginStatus } = props;
+    useEffect(() => {
+        if (loginStatus) {
+            console.log(loginStatus);
+        }
+    }, [loginStatus])
 
     const navigate = useNavigate();
 
@@ -38,6 +45,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Login(props
 
         } catch (err) {
             console.log('error', err);
+            console.log('i never here');
         }
     }
 
@@ -53,6 +61,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Login(props
                                 <input type="email" className="form-control" id="email" placeholder="Email" ref={emailRef} />
                                 <input type="password" className="form-control mt-1" id="password" placeholder="Password" ref={passwordRef} />
                                 <button className="w-100 btn btn-lg btn-primary mt-3" type="submit">Login</button>
+                                {loginStatus &&
+                                    <div className='errorSpan mt-2'>{loginStatus}</div>
+                                }
                             </form>
                         </div>
                     </div>

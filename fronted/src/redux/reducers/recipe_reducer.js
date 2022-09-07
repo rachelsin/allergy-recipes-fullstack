@@ -3,35 +3,33 @@ import { actions } from '../actions/action';
 import createReducer from "./reducerUtils";
 
 const initialState = {
-
-    recipesA: [],
+    recipesSearchResults: [],
     numberOfPages: 0,
-    recpieId: "ddd",
-    r: null,
+    selectedRecipe: null,
+    succeededAddRecipe: null,
     // search: {
     //     pageIndex: null,
     //     tagsFreeOf: null
     // },
     // historySearch: null,
-    succeededAddRecipe: null
+    // recpieId: "ddd",
 };
 
 const recipeData = {
+    setSelectedRecipe(state, action) {
+        state.selectedRecipe = action.payload;
+    },
     setSucceededAddRecipe(state, action) {
         state.succeededAddRecipe = action.payload;
     },
     setARecipes(state, action) {
-        state.recipesA = action.payload.recipes;
+        state.recipesSearchResults = action.payload.recipes;
         state.numberOfPages = action.payload.totalPages;
     },
-    getRecipeId(state, action) {
-        state.recpieId = action.payload;
-    },
-    setR(state, action) {
-        console.log('kkk');
-        state.r = action.payload;
-        console.log(state.r);
-    },
+    /*  getRecipeId(state, action) {
+         state.recpieId = action.payload;
+     }, */
+
     // setSearch(state, action) {
     //     state.search.tagsFreeOf = action.payload.checked;
     //     state.search.pageIndex = action.payload.pageNumber;

@@ -1,4 +1,3 @@
-const { type } = require('express/lib/response');
 const mongoose = require('mongoose');
 
 const RecipeSchema = mongoose.Schema({
@@ -33,11 +32,8 @@ const RecipeSchema = mongoose.Schema({
         type: Array,
         
     },
-    author: {
-        type: mongoose.Types.ObjectId, ref: 'User'
-    },
     user_id: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+        type: mongoose.Types.ObjectId, ref: 'User'
     },
     date: {
         type: Date,

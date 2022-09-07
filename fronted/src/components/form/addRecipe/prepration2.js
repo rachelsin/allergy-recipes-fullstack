@@ -73,7 +73,6 @@ export default function Preparation({ dataPreparation, setDataPreparation, error
             </div>
             <span className='errorSpan'>{errorPreparation}</span>
 
-            <br />
 
             <div>
                 {dataPreparation ?

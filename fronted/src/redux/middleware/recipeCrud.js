@@ -56,8 +56,6 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
         const token = localStorageFunction.getJwt();
         myHeaders.append("x-auth-token", token);
         myHeaders.append("Content-Type", "application/json");
-
-        // console.log(getState().user.userId);
         let raw = JSON.stringify({
             "nameRecipe": action.payload.nameRecipe,
             "tagsFreeOf": action.payload.tagsFreeOf,
@@ -85,7 +83,7 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
                 dispatch(actions.setSucceededAddRecipe(false))
             });
     }
-    if (action.type === 'GET_ALL_RECIPES') {
+    /* if (action.type === 'GET_ALL_RECIPES') {
         myHeaders.append("Content-Type", "application/json");
         var requestOptions = {
             method: 'GET',
@@ -99,63 +97,51 @@ export const recipeCrud = ({ dispatch, getState }) => next => action => {
                 dispatch(actions.setName(true))
             })
             .catch(error => console.log('error', error));
-    }
-    if (action.type === 'GET_NEW_RECIPES') {
-        /*  const myHeaders = new Headers();
-         myHeaders.append("Content-Type", "application/json");
-         let requestOptions = {
-             method: 'GET',
-             headers: myHeaders,
-             redirect: 'follow'
-         };
-         const pageNumber = action.payload;
- 
-         fetch(`http://localhost:5001/recipes?page=0${pageNumber}`, requestOptions)
-             .then((response) => response.json())
-             .then((result) => {
-                 dispatch(actions.setARecipes(result));
-                 // dispatch(actions.setNumberOfPages(total));
-             })
-             .catch(error => console.log('error', error)); */
-    }
+    } */
+    /*     if (action.type === 'GET_NEW_RECIPES') {
+             const myHeaders = new Headers();
+             myHeaders.append("Content-Type", "application/json");
+             let requestOptions = {
+                 method: 'GET',
+                 headers: myHeaders,
+                 redirect: 'follow'
+             };
+             const pageNumber = action.payload;
+     
+             fetch(`http://localhost:5001/recipes?page=0${pageNumber}`, requestOptions)
+                 .then((response) => response.json())
+                 .then((result) => {
+                     dispatch(actions.setARecipes(result));
+                     // dispatch(actions.setNumberOfPages(total));
+                 })
+                 .catch(error => console.log('error', error));
+        } */
     if (action.type === 'GET_RECIPES_BY_TAGS') {
         myHeaders.append("Content-Type", "application/json");
-        // let requestOptions = {
-        //     method: 'GET',
-        //     redirect: 'follow'
-        // };
         const { tags, page } = action.payload;
-        console.log(action.payload);
         let searchString;
         if (tags === '' || typeof tags === 'undefined' || tags === null) {
             searchString = ""
-            console.log(searchString);
         } else {
             searchString = tags.join('+');
-            console.log('arr');
         }
-        console.log(page);
-        // console.log(searchString, pageNumber);
         fetch(`http://localhost:5001/recipes/search/?tags=${searchString}&page=0${page}`)
 
             /*  let x = `/?tags=${searchString}&page=0${pageNumber}` */
             .then((response) => response.json())
             .then((result) => {
-                console.log(result);
                 dispatch(actions.setARecipes(result));
                 // dispatch(actions.setNumberOfPages(total));
             })
             .catch(error => console.log('error', error));
     }
     if (action.type === 'GET_RECIPE_BY_ID') {
-        const { recpieId } = getState().recipe;
-        fetch(`http://localhost:5001/recipe/${recpieId}`)
+        const id = action.payload;
+        // const { recpieId } = getState().recipe;
+        fetch(`http://localhost:5001/recipe/${id}`)
             .then(response => response.json())
             .then((result) => {
-                console.log(result);
-                console.log('yyyy');
-                dispatch(actions.setR(result));
-                // dispatch(actions.setNumberOfPages(total));
+                dispatch(actions.setSelectedRecipe(result));
             })
             .catch(err => console.log('error:', err));
     }

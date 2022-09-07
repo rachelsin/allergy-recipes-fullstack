@@ -8,7 +8,7 @@ const saveRecipe = (newRecipe) => {
 const countRecipes = (tags, tagsName) => {
     return Recipe.countDocuments(tags.length <= 0 ? {} : { tagsFreeOf: { $all: tagsName } });
 }
-const findByTags = (tags, tagsName, PAGE_SIZE, pageInt) => {
+const findRecipesByTags = (tags, tagsName, PAGE_SIZE, pageInt) => {
     return Recipe
         .find(tags.length <= 0 ? {} : { tagsFreeOf: { $all: tagsName } })
         .sort({ date: -1 })
@@ -16,9 +16,8 @@ const findByTags = (tags, tagsName, PAGE_SIZE, pageInt) => {
         .skip(PAGE_SIZE * pageInt)
 }
 
-const findOne = (id) => {
-    return Recipe.findById(id)
-
+const findOneRecipe = (id) => {
+    return Recipe.findOne({ _id: id })
 }
 
-module.exports = { saveRecipe, countRecipes, findByTags, findOne }
+module.exports = { saveRecipe, countRecipes, findRecipesByTags, findOneRecipe }

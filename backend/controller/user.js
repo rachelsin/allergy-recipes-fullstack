@@ -1,57 +1,42 @@
 const User = require('../model/user');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+// const bcrypt = require("bcrypt");
 dotenv.config();
 
-// function register user
-const signup = async (req, res) => {
-    const newUser = new User(req.body)
+const { saveUser, cheackSignUser } = require('../store/user');
+
+const signup = async ({ body: { email, password, name } }, res) => {
     try {
-        /*      const findUser = await User.findOne({ email: req.body.email });
-             if (findUser) return res.status(400).render("User already registered."); */
-        // Todo - rachel
-
-
-        const user = await newUser.save();
-        console.log(user);
+        let newUser = new User({
+            email,
+            password,
+            name
+        })
+        // const salt = await bcrypt.genSalt(10);
+        // newUser.password = await bcrypt.hash(newUser.password, salt);
+        await saveUser(newUser);
         res.json({ status: 200 })
-        console.log('succes create new user');
-
     } catch (err) {
         console.log(err)
         res.status(400).render('error', { error: err })
     }
 }
 
-const login = async (req, res) => {
+const login = async ({ body: { email, password } }, res) => {
     try {
-        let cheackSign = await User.findOne(
-            { email: req.body.email, password: req.body.password }
-        );
-        console.log("cheackSign:" + cheackSign);
-        if (cheackSign == null) {
-            res.status(200).send("this user is not found , try again");
-        } else {
-            const token = jwt.sign(
-                { email: req.body.email, id: cheackSign._id },
-                process.env.SECRET
-            );
-            res.status(200).json({ token: token, cheackSign });
-            console.log('token succses');
+        let user = await cheackSignUser(email, password);
 
-        }
-    }
-    catch (err) { res.status(400).send(err.message) }
-}
-const userData = async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-        res.send(user.name, user.email);
-        console.log('sucsses');
+        const token = jwt.sign(
+            { email, id: user._id },
+            process.env.SECRET
+        );
+        res.status(200).json({ token: token, user });
     }
     catch (err) {
-        console.log(err);
+        console.log(err)
+        res.status(400).render('error', { error: err })
     }
 }
 
-module.exports = { signup, login, userData }
+module.exports = { signup, login }

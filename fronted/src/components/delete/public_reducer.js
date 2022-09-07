@@ -1,4 +1,4 @@
-import produce from 'immer';
+/* import produce from 'immer';
 import { actions } from '../actions/action';
 import createReducer from "./reducerUtils";
 
@@ -18,4 +18,4 @@ const publicData = {
         state.nameState = action.payload;
     }
 }
-export default produce((state, action) => createReducer(state, action, publicData), initialState);
+export default produce((state, action) => createReducer(state, action, publicData), initialState); */

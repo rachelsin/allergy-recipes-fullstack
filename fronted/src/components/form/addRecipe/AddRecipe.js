@@ -126,29 +126,26 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
         navigate(-1)
     }
     return (
-        <>
-            <div className="divBackground" >
-                <div className='backgroundInDiv'>
-                    <h4 className='mx-5' ><i className="bi bi-arrow-left" onClick={handleGoBack} role="button"></i> Add recipe</h4>
-                    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" method="POST" className='cssForm'>
+        <div className="divBackground" >
+            <div className='backgroundInDiv'>
+                <h4 className='mx-5' ><i className="bi bi-arrow-left" onClick={handleGoBack} role="button"></i> Add recipe</h4>
+                <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" method="POST" className=''>
+                    <div className='cssForm'>
                         <TitleAndDescription register={register} errors={errors} />
                         <Img register={register} errors={errors} />
                         <TagsAllergy register={register} errors={errors} />
                         <Ingredients dataIngredients={dataIngredients}
                             setDataIngredients={setDataIngredients} errorIngredients={errorIngredients} />
                         <Preparation dataPreparation={dataPreparation} setDataPreparation={setDataPreparation} errorPreparation={errorPreparation} />
-                        <br />
-                        <button
-                            className="btn btn-danger"
-                            type="submit"
-                        >
-                            ADD RECIPE
+                    </div>
+                    <div className="d-grid gap-2 d-md-flex justify-content-md-end m-5 px-5">
+                        <button className="btn btn-success" type="submit" >
+                            Add Recipe
                         </button>
-
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
-        </>
+        </div>
     )
 })
 

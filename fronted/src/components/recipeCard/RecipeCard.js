@@ -10,8 +10,8 @@ export default function RecipeCard(props) {
     const { recipeItem } = props;
     const { tagsFreeOf } = recipeItem;
     return (
-        <Col md="auto" className='m-4 mb-5'>
-            <Card style={{ width: '18rem', height: '14rem' }} className="clickMe">
+        <Col md="auto" className='m-4 mb-5' key={recipeItem._id}>
+            <Card style={{ width: '18rem', height: '14rem' }} className="clickMe" key={recipeItem._id}>
                 <Link to={`/recpies/${recipeItem._id}`} className="noneLink">
                     <div className='tagsContainer'>
                         {tagsFreeOf.map(tag => (

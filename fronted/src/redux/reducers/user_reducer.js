@@ -9,12 +9,15 @@ const initialState = {
     },
     userId: null,
     signup: null,
-
+    login: null,
 };
 
 const userData = {
+    setSucceededLogin(state, action) {
+        state.login = action.payload;
+    },
     setUserId(state, action) {
-        state.userId = action.payload.id
+        state.userId = action.payload.id;
     },
     setSucceededSignup(state, action) {
         state.signup = action.payload;

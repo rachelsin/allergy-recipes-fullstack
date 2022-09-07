@@ -30,7 +30,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Signup(prop
             });
             setTimeout(() => navigate('/login'), 6000)
         } else if (succeededSignup === false) {
-            toast.success(errorSignup.message, {
+            toast.success('not seccese ,try again', {
                 position: toast.POSITION.TOP_RIGHT
             });
         }

@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     // setRemoveUser: () => dispatch(actions.setRemoveUser()),
-    getDataUser: (userId) => dispatch(actions.getDataUser(userId)),
+    // getDataUser: (userId) => dispatch(actions.getDataUser(userId)),
     setUserId: (id) => dispatch(actions.setUserId(id)),
 })
 
@@ -36,16 +36,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavTop(prop
         }
     }, [user, userName]);
 
-   /*  function handelLogout() {
-        localStorageFunction.logout()
-        setUser(null)
-        setUserId(null)
-        props.setRemoveUser()
-    }
- */
     return (
         <>
-            <Navbar bg="white" expand="lg" className="shadow-sm bg-l">
+            <Navbar bg="white" expand="lg" className="shadow-sm">
                 <Container>
                     <Navbar.Brand>Allergy Recipes</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
@@ -59,9 +52,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavTop(prop
                         <Nav>
                             {!user &&
                                 <>
-                                    <NavLink className="nav-link" to="/signup">signup</NavLink>
-                                    <Navbar.Text>/</Navbar.Text>
-                                    <NavLink className="nav-link" to="/login">login</NavLink>
+                                    <span ><small className="text-muted">Sign up to add and save recipes<i className="bi bi-arrow-right mx-2"></i></small></span>
+                                    <NavLink className="btn-sm btn mx-1 textSignUp" to="/signup"><span className=""></span>Sign Up</NavLink>
+                                    <NavLink className="btn btn-sm mx-1 btn-outline-secondary" to="/login">Log in</NavLink>
                                 </>
                             }
                             {user &&
