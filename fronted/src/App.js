@@ -13,6 +13,7 @@ import NavTop from './components/navbar/NavTop';
 import RecipePage from './components/recpiePage/RecipePage';
 import AddRecipe from './components/form/addRecipe/AddRecipe';
 import Logout from './services/logout'
+import AddImage from './components/form/addRecipe/AddImage';
 // import Test from './components/signup/Test';
 // import Testsearch from './components/search/testparams';
 // import Add from './components/add/add';
@@ -33,6 +34,8 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path='/addRecipe' element={<AddRecipe />} />
             </Route>
+
+            <Route exact path='/addImage' element={<AddImage />} />
             <Route exact path='/signup' element={<Signup />} />
             <Route exact path='/login' element={<Login />} />
             <Route exact path='/recpies/:id' element={<RecipePage />} />

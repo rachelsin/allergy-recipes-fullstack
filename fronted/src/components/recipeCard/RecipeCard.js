@@ -9,6 +9,17 @@ import tags from '../../images/tags.png'
 export default function RecipeCard(props) {
     const { recipeItem } = props;
     const { tagsFreeOf } = recipeItem;
+
+    function checkImage() {
+        let image = recipeItem.recipeImage
+        let result = image.startsWith('http')
+        if (result) {
+            return image;
+        } else {
+            return `http://localhost:5001/${image}`;
+        }
+    }
+
     return (
         <Col md="auto" className='m-4 mb-5' key={recipeItem._id}>
             <Card style={{ width: '18rem', height: '14rem' }} className="clickMe" key={recipeItem._id}>
@@ -35,7 +46,7 @@ export default function RecipeCard(props) {
                             <span key={tag}><img src={tags} style={{ width: '6rem' }} className="tagstextPosition"></img> {tag}</span>
                         ))}</span>
  */}
-                    <Card.Img variant="top" src={recipeItem.recipeImage} style={{ width: '18rem', height: '14rem' }} />
+                    <Card.Img variant="top" src={checkImage()} style={{ height: '15rem', objectFit: 'cover'  }}  className="imgCard"/>
                     <div className='box'>
                         {recipeItem.nameRecipe}
                     </div>

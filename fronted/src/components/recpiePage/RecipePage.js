@@ -45,20 +45,20 @@ export default connect(mapStateToProps, mapDispatchToProps)(function RecipePage(
                         <div className="mb-3 mx-5" >
                             <div className="row g-0">
                                 <div className="col-md-5 bR8">
-                                    <img src={recipe.recpie.recipeImage} className="img-fluid borderRadius" alt="..." />
+                                    <img src={recipe?.recpie?.recipeImage} className="img-fluid borderRadius" alt="..." />
                                 </div>
                                 <div className="col-md-7">
                                     <div className="card-body">
                                         <p><small><i className="bi bi-person-circle"></i> rachel@gmail.com</small></p>
-                                        <h5 className="card-title display-6">{recipe.recpie.nameRecipe}</h5>
+                                        <h5 className="card-title display-6">{recipe.recpie?.nameRecipe}</h5>
 
 
                                         <p className="card-text text-muted">
-                                            {recipe.recpie.description}
+                                            {recipe.recpie?.description}
                                         </p>
                                         <p className="card-text">Free of: </p>
                                         <div className=''>
-                                            {recipe.recpie.tagsFreeOf.map(tag => (
+                                            {recipe.recpie?.tagsFreeOf.map(tag => (
                                                 <span className="border-end border-start border-dark px-1 bgFreeOf"> {tag} </span>
                                             ))}
                                         </div>

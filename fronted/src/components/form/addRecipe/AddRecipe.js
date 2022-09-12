@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../../../redux/actions/action';
 import { useNavigate } from "react-router-dom";
-
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
-
 import TitleAndDescription from './TitleAndDescription';
 import Img from './Img';
+import Img2 from './img2';
 import Ingredients from './Ingredients';
 import TagsAllergy from './TagsAllergy';
 import Preparation from './Preparation';
 import { toast } from 'react-toastify';
 import './addRecipe.css'
+import ImageRecipe from './ImagRecipe';
 
 function mapStateToProps(state) {
     return {
@@ -33,21 +32,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
     const navigate = useNavigate();
     useEffect(() => {
         if (succeededAddRecipe === true) {
-            toast.success('sucsses Add a recipe  !', {
+            toast.success('sucsses Add a recipe!', {
                 position: toast.POSITION.TOP_RIGHT
             });
             let stateSucceed = null;
             props.setSucceededAddRecipe(stateSucceed);
-
             setTimeout(() => navigate('/'), 6000)
-
         } else if (succeededAddRecipe === false) {
-            toast.success('not sucsses add recipe  !', {
+            toast.error('not sucsses add recipe  !', {
                 position: toast.POSITION.TOP_RIGHT
             });
             let stateSucceed = null
             props.setSucceededAddRecipe(stateSucceed);
-
         }
     }, [succeededAddRecipe])
 
@@ -55,9 +51,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
         .object()
         .shape({
             title: yup.string().required().min(2).max(255),
-            description: yup.string().required().min(2).max(1024),
+            description: yup.string().max(1024),
+            imageRecipe: yup.string(),
             image: yup.string(),
-            tagsFreeOf: yup.array().required().min(1),
+            tagsFreeOf: yup.array().required().min(1,'Tags must have at least 1 items'),
         })
         .required();
 
@@ -67,18 +64,22 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
             title: "",
             description: "",
             image: "",
+            imageRecipe: "",
             tagsFreeOf: [],
+            radio: 'A'
         },
     });
-    const [data, setData] = useState()
+    const [data, setData] = useState();
+    const radio = watch("radio")
+    const imageUploud = watch("image");
+    const imageLink = watch("imageRecipe");
     const [dataIngredients, setDataIngredients] = useState([])
     const [errorIngredients, setErrorIngredients] = useState([])
     const [dataPreparation, setDataPreparation] = useState([])
     const [errorPreparation, setErrorPreparation] = useState([])
     const [next, setNext] = useState(false)
-    // const [continue, setContinue] = useState()
-
-
+    const [errorSendRecipe, setErrorSendRecipe] = useState()
+   
     useEffect(() => {
         if (dataIngredients.length < 2) {
             setErrorIngredients("must be at least 2 ingredients")
@@ -89,27 +90,51 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
 
     useEffect(() => {
         if (dataPreparation.length < 1) {
-            setErrorPreparation(" must be at least 1 preparation")
+            setErrorPreparation("must be at least 1 preparation")
         } else {
             setErrorPreparation(null)
         }
     }, [dataPreparation])
     useEffect(() => {
-        if (errorIngredients === null && errorIngredients === null) {
+        if (errorIngredients === null && errorPreparation === null) {
             setNext(true)
         }
-    }, [errorIngredients, errorIngredients])
+    }, [errorIngredients, errorPreparation])
+    useEffect(() => {
+        if (errorSendRecipe) {
+            if (!errorIngredients && errorPreparation) {
+                setErrorSendRecipe("must be at least 1 Preparation");
+            } else if (!errorIngredients && !errorPreparation) {
+                setErrorSendRecipe(null)
+            }
+        }
+    }, [errorSendRecipe, errorIngredients, errorPreparation])
+    const chooseRadio = () => {
+        if (radio === 'A') {
+            if (imageUploud !== '') {
+                return imageUploud[0]
+            } else {
+                return 'https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_960_720.jpg'
+            }
+        } else if (radio === 'B') {
+            if (imageLink) {
+                return imageLink
+            } else {
+                return 'https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_960_720.jpg'
+            }
+        }
+    }
 
     const onSubmit = data => {
         setData(data)
-        console.log(data, data.image[0]);
-        console.log(dataIngredients, dataPreparation);
+        const image = imageUploud[0];
+        // console.log(dataIngredients, dataPreparation);
         if (next === true) {
             console.log("contine");
             let dataRecipe = {
                 nameRecipe: data.title,
-                recipeImage: "https://cdn.pixabay.com/photo/2016/11/23/18/31/pasta-1854245_960_720.jpg",
-                // recipeImage: data.image[0],
+                // recipeImage: data.imageRecipe ? data.imageRecipe : "https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_960_720.jpg",
+                recipeImage: chooseRadio(),
                 tagsFreeOf: data.tagsFreeOf,
                 description: data.description,
                 ingredients: dataIngredients,
@@ -119,7 +144,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
             props.addRecipe(dataRecipe)
 
         } else {
-            console.log("not contineu");
+            if (errorIngredients && errorPreparation) {
+                setErrorSendRecipe("must be at least 2 ingredients")
+            } else if (!errorIngredients && errorPreparation) {
+                setErrorSendRecipe("must be at least 1 Preparation")
+            } else if (errorIngredients && !errorPreparation) {
+                setErrorSendRecipe("must be at least 2 ingredients")
+            }
         }
     }
     const handleGoBack = () => {
@@ -132,16 +163,26 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
                 <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" method="POST" className=''>
                     <div className='cssForm'>
                         <TitleAndDescription register={register} errors={errors} />
-                        <Img register={register} errors={errors} />
+                        <Img register={register} errors={errors} radio={radio} />
+                        {/* <ImageRecipe register={register} errors={errors} /> */}
+
                         <TagsAllergy register={register} errors={errors} />
                         <Ingredients dataIngredients={dataIngredients}
                             setDataIngredients={setDataIngredients} errorIngredients={errorIngredients} />
                         <Preparation dataPreparation={dataPreparation} setDataPreparation={setDataPreparation} errorPreparation={errorPreparation} />
                     </div>
-                    <div className="d-grid gap-2 d-md-flex justify-content-md-end m-5 px-5">
-                        <button className="btn btn-success" type="submit" >
-                            Add Recipe
-                        </button>
+                    <div className="m-5 px-5">
+                        <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
+                            <button className="btn btn-success" type="submit" >
+                                Add Recipe
+                            </button>
+                        </div>
+                        <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
+                            {
+                                errorSendRecipe &&
+                                <span className='errorSpan'>{errorSendRecipe}</span>
+                            }
+                        </div>
                     </div>
                 </form>
             </div>

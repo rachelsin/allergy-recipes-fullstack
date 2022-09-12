@@ -32,13 +32,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
     const [searchParams, setSearchParams] = useSearchParams();
     const { register, watch, setValue } = useForm();
     const tagsAllergy = watch("tagsFreeOf");
-    const [pageNumber, setPageNumber] = useState()
+    const [pageNumber, setPageNumber] = useState(0)
     const pages = new Array(numberOfPages).fill(null).map((v, i) => i)
-    useEffect(() => {
-        if (numberOfPages < pageNumber + 1) {
-            setPageNumber(0)
-        }
-    }, [numberOfPages])
 
     const allergyFood = [
         { nameList: "milk", nameImage: milk, nameWrite: "Milk" },
@@ -50,39 +45,91 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
         { nameList: "sesame", nameImage: sesame, nameWrite: "Sesame" },
         { nameList: "fish", nameImage: fish, nameWrite: "Fish" },
     ]
+
     useEffect(() => {
-        if (pageNumber && tagsAllergy === null) {
-            setSearchParams({ tags: '', page: pageNumber })
-        } else if (tagsAllergy && tagsAllergy.length >= 0) {
-            let newTags = [...tagsAllergy];
-            let tags = newTags.join(" ");
-            setSearchParams({ tags, page: pageNumber })
+        let tags;
+        let page;
+        if (searchParams && !tagsAllergy && pageNumber === 0) {
+            let searchTags = searchParams.get('tags');
+            let searchPage = searchParams.get('page');
+            searchPage ? page = parseInt(searchPage) : page = 0;
+            if (searchTags) {
+                tags = searchTags.split(" ");
+                setValue("tagsFreeOf", tags)
+            } else {
+                tags = searchTags;
+            }
+            setValue("tagsFreeOf", tags)
+            setPageNumber(page)
+            props.getRecipesByTags({ tags, page })
+        } else {
+            tagsAllergy ? tags = tagsAllergy : tags = '';
+            pageNumber ? page = parseInt(pageNumber) : page = 0;
+            page = pageNumber;
+            setSearchParams({ tags, page })
+            props.getRecipesByTags({ tags, page })
         }
     }, [pageNumber, tagsAllergy])
 
+    useEffect(() => {
+        if (numberOfPages < pageNumber + 1) {
+            setPageNumber(0)
+        }
+    }, [numberOfPages])
+
+
     /*  useEffect(() => {
-         if (tagsAllergy) {
+         if (pageNumber && tagsAllergy === null) {
+             setSearchParams({ tags: '', page: pageNumber })
+         } else if (tagsAllergy && tagsAllergy.length >= 0) {
              let newTags = [...tagsAllergy];
              let tags = newTags.join(" ");
              setSearchParams({ tags, page: pageNumber })
-             console.log('ddddddd');
-         } else if (pageNumber && tagsAllergy === '') {
-             console.log('eeee');
-             setSearchParams({ tags: "", page: pageNumber })
          }
-     }, [pageNumber, tagsAllergy]) */
+     }, [pageNumber, tagsAllergy])
+  */
+    /*     useEffect(() => {
+            let page;
+            let tags;
+            if (searchParams && tagsAllergy === null) {
+                let searchTags = searchParams.get('tags');
+                let searchPage = searchParams.get('page');
+                searchPage ? page = parseInt(searchPage) : page = 0;
+                if (searchTags) {
+                    tags = searchTags.split(" ");
+                    setValue("tagsFreeOf", tags)
+                } else {
+                    tags = searchTags;
+                }
+                setValue("tagsFreeOf", tags)
+                setPageNumber(page)
+                props.getRecipesByTags({ tags, page })
+            } else if (pageNumber && tagsAllergy === null) {
+                tags = 0;
+                page = pageNumber;
+                setSearchParams({ tags: '', page: pageNumber })
+                props.getRecipesByTags({ tags, page })
+            } else if (tagsAllergy?.length >= 0) {
+                let newTags = [...tagsAllergy];
+                tags = newTags.join(" ");
+                page = pageNumber;
+                setSearchParams({ tags, page });
+                props.getRecipesByTags({ tags, page })
+    
+            } else {
+                page = 0;
+                tags = '';
+                props.getRecipesByTags({ tags, page })
+            }
+        }, [pageNumber, tagsAllergy, searchParams]) */
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (searchParams) {
             let searchTags = searchParams.get('tags')
             let searchPage = searchParams.get('page')
             let page;
             let tags;
-            /*  if (searchPage) {
-                 page = parseInt(searchPage)
-             } else {
-                 page = 0;
-             } */
+            
             searchPage ? page = parseInt(searchPage) : page = 0;
             if (searchTags) {
                 tags = searchTags.split(" ");
@@ -94,7 +141,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
             setPageNumber(page)
             props.getRecipesByTags({ tags, page })
         }
-    }, [searchParams])
+    }, [searchParams]) */
 
     const gotoPrevious = () => {
         setPageNumber(Math.max(0, pageNumber - 1));
@@ -113,21 +160,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
     const active = (pageIndex) => [
         (pageIndex === pageNumber) ? "active" : "noneActive"
     ]
-    const styles = {
+    /* const styles = {
         width: '5rem',
         border: "3px solid #feedc0c7"
-    };
+    }; */
 
     return (
         <div className='bg-l'>
+            <div className='text-center pt-3 bg-l2'>
+                <div className='display-6 pb-1'>Eating with Food Allergies</div>
+                <div>Show only recipes that are FREE of: <small> (select one or more)</small></div>
+                {/* <p>chiose</p> */}
+            </div>
             <div className='mb-3'>
-                <div className='bg-l2 bb m-auto'>
-                    <Row className="justify-content-md-center">
+                <div className='bg-l2 m-auto'>
+                    <Row className="justify-content-center justify-content-sm-center justify-content-md-center justify-content-lg-center">
                         <Col md="auto" className=''>
                             {allergyFood.map((item, index) => (
                                 <label className="option_item mx-3 " key={index}>
                                     <input value={item.nameList} type="checkbox" className="checkbox"
-
                                         {...register("tagsFreeOf")}
                                     />
                                     <div className="option_inner" >
@@ -135,7 +186,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
                                             <div className="line"></div>
                                         </div>
                                         <div className="image">
-                                            <img src={item.nameImage} style={styles} className='rounded-circle mx-3 my-1' />
+                                            <img src={item.nameImage} className='styleImage rounded-circle mx-3 my-1 img-fluid' />
                                         </div>
                                         <div className="name mb-3">{item.nameWrite}</div>
                                     </div>
@@ -182,7 +233,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
                     </>
                     :
                     <div className='bg-l2 bb m-auto text-center pt-4'>
-                        <p>soory, but no found recipe...</p>
+                        <p>Sorry, we couldn't find any matches..</p>
                     </div>
                 }
             </div>

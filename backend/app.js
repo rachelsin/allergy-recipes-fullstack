@@ -8,6 +8,7 @@ const cors = require("cors");
 dotenv.config();
 const router = require('./routes/api');
 
+
 const connectionParams = {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -20,8 +21,10 @@ mongoose.connect(process.env.DB_CONECCT, connectionParams)
     .catch((err) => {
         console.error(`Error connecting to the database. ${err}`);
     });
+
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static('uploads'));
 
 app.use('/', router)
 

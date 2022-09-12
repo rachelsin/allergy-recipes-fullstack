@@ -40,6 +40,34 @@
 }
 
 .styleImage {
-    width: '5rem';
-    border: "3px solid #feedc0c7";
+    width: 5rem;
+    border: 3px solid #feedc0c7;
+}
+
+@media only screen and (max-width: 800px) {
+    .styleImage {
+        width: 4rem;
+    }
+    .line {
+        width: calc(0.94 * 4rem);
+        bottom: 40px;
+        left: 24px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .styleImage {
+        width: 3rem;
+    }
+
+    .line {
+        width: calc(0.70 * 4rem);
+        /* transform: rotate(-45deg); */
+        /* transform-origin: bottom left; */
+        /* border-top: 3px solid #feedc0c7; */
+        /* position: absolute; */
+        bottom: 35px;
+        left: 24px;
+        /* box-sizing: border-box; */
+    }
 }

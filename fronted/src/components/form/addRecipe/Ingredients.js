@@ -3,16 +3,24 @@ import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 
+const schema = yup.object().shape({
+    qty: yup.number().typeError('Amount must be a number').required().max(1000000),
+    measurement: yup.string().required().min(2),
+    ingredient: yup.string().required().min(2).max(255),
+}).required();
 
+const schemaEdit = yup.object().shape({
+    editQty: yup.number().typeError('Amount must be a number').required().min(1).max(1000000),
+    editMeasurement: yup.string().required('ingredient is a required field').min(2, 'ingredient must be at least 2 characters'),
+    editIngredient: yup.string().required().min(2).max(255),
+}).required();
 
 export default function Ingredients({ dataIngredients, setDataIngredients, errorIngredients }) {
-    const schema = yup.object().shape({
-        qty: yup.number().required().max(1000000),
-        measurement: yup.string().required().min(2),
-        ingredient: yup.string().required().min(2).max(255),
-    }).required();
+
+
 
     const { register: ingredientRegister, handleSubmit: ingredientHandleSubmit, setValue: setValueIngredient, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
@@ -22,11 +30,6 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
             ingredient: ""
         }
     });
-    const schemaEdit = yup.object().shape({
-        editQty: yup.number().required().min(1).max(1000000),
-        editMeasurement: yup.string().required().min(2),
-        editIngredient: yup.string().required().min(2).max(255),
-    }).required();
 
     const {
         register: editRegister,
@@ -42,10 +45,10 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
         }
     });
 
-    const measurementArray = ["cup", "cups", "tsp", "tbsp", "gram", "kg", "ml", "liter", "unit", "package"]
     const [dataId, setDataId] = useState(null);
+    const measurementArray = ["cup", "cups", "tsp", "tbsp", "gram", "kg", "ml", "liter", "unit", "package"]
 
-    function addIngredients(data) {
+    const addIngredients = data => {
         let dataBasic = {
             id: nanoid(),
             qty: data.qty,
@@ -59,13 +62,11 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
         setValueIngredient("ingredient", "")
     }
     function removeFromData(id) {
-        console.log(id);
         let idItem = id;
         setDataIngredients(dataIngredients.filter(item => item.id !== idItem));
     }
 
     function editFromData(data) {
-        // console.log(id);
         const { id, qty, measurement, ingredient } = data;
         setDataId(id)
         editSetValue("editQty", qty)
@@ -94,8 +95,6 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
     return (
         <>
             <h5 className='mt-3'> Ingredients* <span className='descriptionSpan mb-1'>{errorIngredients}</span></h5>
-
-
             <div className='row mt-3'>
                 <div className="col-md-3">
                     <label htmlFor="inputQty" className="form-label">Amount</label>
@@ -128,25 +127,16 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
                 <div className="col-md-1 px-1">
                     <label htmlFor="inputIngredient" className="form-label text-white">.</label>
                     <div>
-                        <i className="bi bi-plus-circle hoverIcon" style={{ fontSize: '1.5em' }} onClick={ingredientHandleSubmit(addIngredients)}></i>
+                        <OverlayTrigger placement='right' overlay={<Tooltip>Add</Tooltip>}>
+                            <i className="bi bi-plus-circle hoverIcon" style={{ fontSize: '1.5em' }} onClick={ingredientHandleSubmit(addIngredients)}></i>
+                        </OverlayTrigger>
                     </div>
-
-                    {/* <button className='form-control bg-success text-white' onClick={ingredientHandleSubmit(addIngredients)}>add</button> */}
                 </div>
             </div>
 
             {dataIngredients.length > 0 ?
                 <table className="table">
-                    {/* <thead>
-                        <tr>
-                            <th scope="col">amount</th>
-                            <th scope="col">Measurement</th>
-                            <th scope="col">Ingredient</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead> */}
                     <tbody>
-
                         {dataIngredients.map(data => (
                             <>
                                 {dataId === data.id ? (
@@ -178,10 +168,14 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
                                                     </span>
                                                 </span>
                                                 <span className='p-2'>
-                                                    <i className="bi bi-backspace hoverIcon" onClick={handleCancelClick}></i>
+                                                    <OverlayTrigger overlay={<Tooltip>Cancel</Tooltip>}>
+                                                        <i className="bi bi-backspace hoverIcon" onClick={handleCancelClick}></i>
+                                                    </OverlayTrigger>
                                                 </span>
                                                 <span className='p-2'>
-                                                    <i className="bi bi-save hoverIcon" onClick={editHandleSubmit(saveEditFromData)}></i>
+                                                    <OverlayTrigger overlay={<Tooltip>Save</Tooltip>}>
+                                                        <i className="bi bi-save hoverIcon" onClick={editHandleSubmit(saveEditFromData)}></i>
+                                                    </OverlayTrigger>
                                                 </span>
                                             </div>
                                         </td>
@@ -192,45 +186,27 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
                                             <div className='d-flex'>
                                                 <span className="me-auto p-2">{data.qty} {data.measurement} {data.ingredient}</span>
                                                 <span className='p-2'>
+                                                    <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
                                                         <i className="bi bi-pencil hoverIcon"
-                                                        onClick={() => editFromData(data)}></i>
+                                                            onClick={() => editFromData(data)}></i>
+                                                    </OverlayTrigger>
                                                 </span>
                                                 <span className='p-2'>
-                                                    <i className="bi bi-x-lg hoverIcon"
-                                                        onClick={() => removeFromData(data.id)}></i>
+                                                    <OverlayTrigger overlay={<Tooltip>Delete</Tooltip>}>
+                                                        <i className="bi bi-x-lg hoverIcon"
+                                                            onClick={() => removeFromData(data.id)}></i>
+                                                    </OverlayTrigger>
                                                 </span>
                                             </div>
                                         </td>
-                                        {/* <td>{data.qty}</td>
-                                        <td>{data.measurement} </td>
-                                        <td> {data.ingredient}</td>
-                                        <td>
-                                            <button
-                                                className='btn btn-outline-danger btn-sm'
-                                                onClick={() => editFromData(data)}
-                                            >Edit
-                                            </button>
-                                            <button
-                                                className='btn btn-outline-danger btn-sm'
-                                                onClick={() => FromData(data.id)}
-                                            >TestEdit
-                                            </button>
-                                            <button
-                                                className='btn btn-outline-danger btn-sm'
-                                                onClick={() => removeFromData(data.id)}
-                                            >Delete
-                                            </button>
-                                        </td> */}
                                     </tr>
                                 )
                                 }
                             </>
                         ))}
-
                     </tbody>
                 </table>
                 : null
-
             }
         </>
     )

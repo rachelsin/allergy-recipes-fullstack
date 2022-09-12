@@ -9,8 +9,6 @@ const RecipeSchema = mongoose.Schema({
     },
     description: {
         type: String,
-        required: true,
-        minlength: 2,
         maxlength: 1024
     },
     recipeImage: {

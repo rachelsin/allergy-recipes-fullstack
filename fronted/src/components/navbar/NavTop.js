@@ -45,6 +45,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function NavTop(prop
                     <Navbar.Collapse id="navbarScroll">
                         <Nav className="me-auto" style={{ maxHeight: '100px' }} navbarScroll>
                             <NavLink className="nav-link" to="/">Home</NavLink>
+                            <NavLink className="nav-link" to="/addImage">Add image</NavLink>
                             {user &&
                                 <NavLink className="nav-link" to="/addRecipe">Add a Recipe</NavLink>
                             }

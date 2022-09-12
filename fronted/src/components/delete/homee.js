@@ -182,7 +182,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Home(props)
                     </>
                     :
                     <div className='bg-l2 bb m-auto text-center pt-4'>
-                        <p>soory, but no found recipe...</p>
+                        <p>Sorry, we couldn't find any matches..</p>
                     </div>
                 }
             </div>

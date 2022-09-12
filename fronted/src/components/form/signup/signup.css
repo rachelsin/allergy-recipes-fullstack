@@ -22,18 +22,13 @@
 }
 
 .divSignup {
+    width: 300px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    /* max-width: 500px; */
-    /* color: #17D4FE; */
-    /* font-size: 60px; */
-    /* font-family: Orbitron; */
-    /* letter-spacing: 7px; */
 }
 
-.letterSpacing5 {
-    /* position: relative; */
-    letter-spacing: 7px
-}
+/* .letterSpacing5 {
+    letter-spacing: 10px
+} */

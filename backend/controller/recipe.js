@@ -1,21 +1,26 @@
 // const User = require('../model/user');
 const Recipe = require('../model/recipe');
+const RecipeImage = require('../model/recipeImage');
 
 const { saveRecipe, countRecipes, findRecipesByTags, findOneRecipe } = require('../store/recipe');
 
 const { PAGE_SIZE } = require('../config/config');
 
 
-const addRecipe = async ({ body: { nameRecipe, description, tagsFreeOf, ingredients, preparation, user_id, recipeImage } }, res) => {
+// const addRecipe = async ({ body: { nameRecipe, description, tagsFreeOf, ingredients, preparation, user_id, recipeImage } }, res) => {
+const addRecipe = async (req, res) => {
+    console.log('came here');
+    const { nameRecipe, description, tagsFreeOf, ingredients, preparation, user_id, recipeImage } = req.body;
+    const path = req?.file?.path;
     try {
         const newRecipe = new Recipe({
             nameRecipe,
             description,
-            recipeImage,
-            tagsFreeOf,
-            ingredients,
-            preparation,
-            user_id,
+            recipeImage: path ? path.replace('\\', '/') : recipeImage,
+            tagsFreeOf: JSON.parse(tagsFreeOf),
+            ingredients: JSON.parse(ingredients),
+            preparation: JSON.parse(preparation),
+            user_id: JSON.parse(user_id),
         })
         await saveRecipe(newRecipe);
         res.json({ status: 200 })
@@ -52,5 +57,6 @@ const getRecipe = async ({ params: { id } }, res) => {
         res.status(400).send(err.message)
     }
 }
+
 
 module.exports = { addRecipe, searchByTags, getRecipe }
