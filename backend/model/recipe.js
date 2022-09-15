@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const RecipeSchema = mongoose.Schema({
-    nameRecipe: {
+    title: {
         type: String,
         required: true,
         minlength: 2,
@@ -11,7 +11,7 @@ const RecipeSchema = mongoose.Schema({
         type: String,
         maxlength: 1024
     },
-    recipeImage: {
+    image: {
         type: String
     },
     tagsFreeOf: {
@@ -28,7 +28,7 @@ const RecipeSchema = mongoose.Schema({
     ],
     preparation: {
         type: Array,
-        
+
     },
     user_id: {
         type: mongoose.Types.ObjectId, ref: 'User'

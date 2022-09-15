@@ -1,10 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-
 
 const schema = yup.object().shape({
     qty: yup.number().typeError('Amount must be a number').required().max(1000000),
@@ -18,11 +17,14 @@ const schemaEdit = yup.object().shape({
     editIngredient: yup.string().required().min(2).max(255),
 }).required();
 
-export default function Ingredients({ dataIngredients, setDataIngredients, errorIngredients }) {
+export default function Ingredients({ dataIngredients, setDataIngredients, errorIngredients, ingredientRef }) {
 
-
-
-    const { register: ingredientRegister, handleSubmit: ingredientHandleSubmit, setValue: setValueIngredient, formState: { errors } } = useForm({
+    const {
+        register: ingredientRegister,
+        handleSubmit: ingredientHandleSubmit,
+        setValue: setValueIngredient,
+        formState: { errors }
+    } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
             qty: "",
@@ -94,10 +96,10 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
 
     return (
         <>
-            <h5 className='mt-3'> Ingredients* <span className='descriptionSpan mb-1'>{errorIngredients}</span></h5>
+            <h5 className='mt-3'> Ingredients* <span className='descriptionSpan mb-1'>at least 2 ingredients</span></h5>
             <div className='row mt-3'>
                 <div className="col-md-3">
-                    <label htmlFor="inputQty" className="form-label">Amount</label>
+                    <label htmlFor="inputQty" className="form-label" ref={ingredientRef}>Amount</label >
                     <input  {...ingredientRegister("qty")} type="text" className="form-control" id="inputQty" />
                     <span className="errorSpan">
                         {errors.qty?.message}
@@ -128,7 +130,7 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
                     <label htmlFor="inputIngredient" className="form-label text-white">.</label>
                     <div>
                         <OverlayTrigger placement='right' overlay={<Tooltip>Add</Tooltip>}>
-                            <i className="bi bi-plus-circle hoverIcon" style={{ fontSize: '1.5em' }} onClick={ingredientHandleSubmit(addIngredients)}></i>
+                            <i className="bi bi-plus-circle hoverIcon bigIcon" onClick={ingredientHandleSubmit(addIngredients)}></i>
                         </OverlayTrigger>
                     </div>
                 </div>
@@ -206,8 +208,11 @@ export default function Ingredients({ dataIngredients, setDataIngredients, error
                         ))}
                     </tbody>
                 </table>
+
                 : null
             }
+            <span className="errorSpan"> {errorIngredients}
+            </span>
         </>
     )
 }

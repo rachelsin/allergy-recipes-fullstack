@@ -6,7 +6,7 @@ const upload = require('../middleware/upload');
 
 router.post('/signup', user.signup);
 router.post('/login', user.login);
-router.post('/addRecipe', auth, upload.single('recipeImage'), recipe.addRecipe);
+router.post('/addRecipe', auth, upload.single('image'), recipe.addRecipe);
 router.get('/recipes/search', recipe.searchByTags);
 router.get('/recipe/:id', recipe.getRecipe);
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -11,6 +10,7 @@ const schema = yup
         step: yup.string().required('Preparation is a required field').min(2, 'Preparation must be at least 2 characters').max(255),
     })
     .required();
+
 const schemaEdit = yup
     .object()
     .shape({
@@ -18,7 +18,7 @@ const schemaEdit = yup
     })
     .required();
 
-export default function Preparation({ dataPreparation, setDataPreparation, errorPreparation }) {
+export default function Preparation({ dataPreparation, setDataPreparation, errorPreparation, preparationRef }) {
 
     const {
         register: preparationRegister,
@@ -74,26 +74,21 @@ export default function Preparation({ dataPreparation, setDataPreparation, error
         setDataPreparation(dataPreparation.filter((x, index) => index !== indexItem));
     }
 
-
     return (
         <>
-            <label className='mt-4'><h5> Preparation*  <span className='descriptionSpan mb-1'>{errorPreparation}</span></h5></label>
-
+            <label htmlFor='preparation' className='mt-4' ref={preparationRef}><h5> Preparation*  <span className='descriptionSpan mb-1'>at least 1 preparation</span></h5></label>
             <div className='row'>
                 <div className='col-md-11'>
-                    <input type="text" className="form-control" placeholder="Add the preparation steps, each step added separately.." {...preparationRegister("step")} />
+                    <input type="text" className="form-control" id="preparation" placeholder="Add the preparation steps, each step added separately.." {...preparationRegister("step")} />
                     <span className="errorSpan">
                         {errors.step?.message}
                     </span>
                 </div>
                 <div className='col-md-1 px-1 ' >
                     <OverlayTrigger placement='right' overlay={<Tooltip>Add</Tooltip>}>
-                        <i className="bi bi-plus-circle hoverIcon" style={{ fontSize: '1.5em', width: '1.5em', height: '1.5em', padding: '0.1em' }} onClick={preparationHandleSubmit(addStep)}></i>
+                        <i className="bi bi-plus-circle hoverIcon bigIcon"  onClick={preparationHandleSubmit(addStep)}></i>
                     </OverlayTrigger>
-
                 </div>
-
-
             </div>
 
 
@@ -152,6 +147,8 @@ export default function Preparation({ dataPreparation, setDataPreparation, error
                         }
                     </tbody>
                 </table>
+                <span className="errorSpan"> {errorPreparation}
+                </span>
             </div>
         </>
     )

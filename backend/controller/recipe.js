@@ -1,26 +1,18 @@
-// const User = require('../model/user');
 const Recipe = require('../model/recipe');
-const RecipeImage = require('../model/recipeImage');
-
 const { saveRecipe, countRecipes, findRecipesByTags, findOneRecipe } = require('../store/recipe');
-
 const { PAGE_SIZE } = require('../config/config');
 
 
-// const addRecipe = async ({ body: { nameRecipe, description, tagsFreeOf, ingredients, preparation, user_id, recipeImage } }, res) => {
-const addRecipe = async (req, res) => {
-    console.log('came here');
-    const { nameRecipe, description, tagsFreeOf, ingredients, preparation, user_id, recipeImage } = req.body;
-    const path = req?.file?.path;
+const addRecipe = async ({ body: { title, description, image, tagsFreeOf, ingredients, preparation, userId }, file }, res) => {
     try {
         const newRecipe = new Recipe({
-            nameRecipe,
+            title,
             description,
-            recipeImage: path ? path.replace('\\', '/') : recipeImage,
+            image: file?.path ? file.path.replace('\\', '/') : image,
             tagsFreeOf: JSON.parse(tagsFreeOf),
             ingredients: JSON.parse(ingredients),
             preparation: JSON.parse(preparation),
-            user_id: JSON.parse(user_id),
+            user_id: JSON.parse(userId),
         })
         await saveRecipe(newRecipe);
         res.json({ status: 200 })
@@ -48,10 +40,8 @@ const searchByTags = async ({ query: { tags, page } }, res) => {
 
 const getRecipe = async ({ params: { id } }, res) => {
     try {
-        const recpie = await findOneRecipe(id)
-        res.status(200).json({
-            recpie: recpie
-        })
+        const recipe = await findOneRecipe(id)
+        res.status(200).json({ recipe })
     } catch (err) {
         console.log(err)
         res.status(400).send(err.message)

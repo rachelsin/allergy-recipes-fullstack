@@ -7,12 +7,6 @@ const initialState = {
     numberOfPages: 0,
     selectedRecipe: null,
     succeededAddRecipe: null,
-    // search: {
-    //     pageIndex: null,
-    //     tagsFreeOf: null
-    // },
-    // historySearch: null,
-    // recpieId: "ddd",
 };
 
 const recipeData = {
@@ -26,16 +20,5 @@ const recipeData = {
         state.recipesSearchResults = action.payload.recipes;
         state.numberOfPages = action.payload.totalPages;
     },
-    /*  getRecipeId(state, action) {
-         state.recpieId = action.payload;
-     }, */
-
-    // setSearch(state, action) {
-    //     state.search.tagsFreeOf = action.payload.checked;
-    //     state.search.pageIndex = action.payload.pageNumber;
-    // },
-    // setHistorySearch(state, action) {
-    //     state.historySearch = action.payload;
-    // }
 }
 export default produce((state, action) => createReducer(state, action, recipeData), initialState);

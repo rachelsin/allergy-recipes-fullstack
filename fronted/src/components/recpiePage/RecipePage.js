@@ -1,37 +1,43 @@
 import React, { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../redux/actions/action';
 
 import './recipePage.css'
 
-const mapStateToProps = (state) => {
-    return {
-        // recpie_id: state.recipe.recpieId,
-        recipe: state.recipe.selectedRecipe,
-    };
-}
-const mapDispatchToProps = (dispatch) => ({
-    // getRecipeId: (recpieId) => dispatch(actions.getRecipeId(recpieId)),
-    // getRecipeById: (recpie_id) => dispatch(actions.getRecipeById(recpie_id)),
-    getRecipeById: (id) => dispatch(actions.getRecipeById(id)),
+export default function RecipePage() {
+    const recipe = useSelector(state => state.recipe.selectedRecipe)
+    const dispatch = useDispatch()
 
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(function RecipePage(props) {
-    const { recipe } = props;
+    const navigate = useNavigate();
     const { id } = useParams();
 
     useEffect(() => {
         if (id !== undefined) {
-            props.getRecipeById(id);
+            dispatch(actions.getRecipeById(id))
         }
     }, [id])
 
-    const navigate = useNavigate();
-
     const handleGoBack = () => {
         navigate(-1)
+    }
+
+    function checkImage() {
+        let image = recipe?.image
+        let result = image.startsWith('http')
+        if (result) {
+            return image;
+        } else {
+            return `http://localhost:5001/${image}`;
+        }
+    }
+
+    function formatDate(date) {
+        const currentMonth = date.getMonth() + 1;
+        const monthString = currentMonth >= 10 ? currentMonth : `0${currentMonth}`;
+        const currentDate = date.getDate();
+        const dateString = currentDate >= 10 ? currentDate : `0${currentDate}`;
+        return `${dateString}/${monthString}/${date.getFullYear()}`;
     }
 
     return (
@@ -40,25 +46,33 @@ export default connect(mapStateToProps, mapDispatchToProps)(function RecipePage(
                 <div className='divBackground'>
                     <div className='backgroundInDiv'>
                         <div className='mb-5'>
-                            <p className='mx-5' role="button" onClick={handleGoBack}><i className="bi bi-arrow-left"></i> Go back</p>
+                            <p className='mx-5' role="button" onClick={handleGoBack}>
+                                <i className="bi bi-arrow-left"></i>
+                                Go back
+                            </p>
                         </div>
                         <div className="mb-3 mx-5" >
                             <div className="row g-0">
-                                <div className="col-md-5 bR8">
-                                    <img src={recipe?.recpie?.recipeImage} className="img-fluid borderRadius" alt="..." />
+                                <div className="col-md-5">
+                                    <img src={checkImage()} className="img-fluid borderRadius" alt=" recipe image" />
                                 </div>
                                 <div className="col-md-7">
                                     <div className="card-body">
-                                        <p><small><i className="bi bi-person-circle"></i> rachel@gmail.com</small></p>
-                                        <h5 className="card-title display-6">{recipe.recpie?.nameRecipe}</h5>
-
-
+                                        <h5 className="card-title display-6">
+                                            {recipe?.title}
+                                        </h5>
+                                        <p>
+                                            <small className='text-muted'>
+                                                <i className="bi bi-calendar4 px-1"></i>
+                                                {formatDate(new Date(recipe.date))}
+                                            </small>
+                                        </p>
                                         <p className="card-text text-muted">
-                                            {recipe.recpie?.description}
+                                            {recipe?.description}
                                         </p>
                                         <p className="card-text">Free of: </p>
                                         <div className=''>
-                                            {recipe.recpie?.tagsFreeOf.map(tag => (
+                                            {recipe?.tagsFreeOf.map(tag => (
                                                 <span className="border-end border-start border-dark px-1 bgFreeOf"> {tag} </span>
                                             ))}
                                         </div>
@@ -70,7 +84,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function RecipePage(
                                     <h4>Ingredients</h4>
                                     <table className='table table-striped'>
                                         <tbody>
-                                            {recipe.recpie.ingredients.map(ingredient => (
+                                            {recipe?.ingredients.map(ingredient => (
                                                 <tr>
                                                     <td>{ingredient.qty} {ingredient.measurement} {ingredient.ingredient}</td>
                                                 </tr>
@@ -80,10 +94,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(function RecipePage(
                                 </div>
                                 <div className='my-5 col-md-10'>
                                     <h4 className=''>preparation</h4>
-                                    <div className='bgPreparation mt-3 px-2 py-3  '>
-                                        {recipe.recpie.preparation.map(item => (
-                                            <p >{item}</p>
-                                        ))}
+                                    <div className='bgPreparation mt-2 p-2'>
+                                        <ol className="list-group list-group-numbered">
+                                            {recipe?.preparation.map(item => (
+                                                <li className='list-group-item'>{item}</li>
+                                            ))}
+                                        </ol>
                                     </div>
                                 </div>
                             </div>
@@ -95,4 +111,3 @@ export default connect(mapStateToProps, mapDispatchToProps)(function RecipePage(
         </>
     )
 }
-)

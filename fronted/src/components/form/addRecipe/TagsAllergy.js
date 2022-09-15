@@ -16,7 +16,6 @@ export default function TagsAllergy({ register, errors }) {
                             className='form-check-input'
                             {...register("tagsFreeOf", { required: true })} />
                         <label className='form-check-label' >{item}</label>
-                        {/* <span className={isChecked(item)}>{item}</span> */}
                     </div>
                 ))}
             </div>

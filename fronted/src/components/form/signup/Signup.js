@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/actions/action';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -9,20 +9,11 @@ import * as yup from "yup";
 
 import './signup.css'
 
-function mapStateToProps(state) {
-    return {
-        succeededSignup: state.user.signup,
-        errorSignup: state.user.errorSignup,
-    };
-}
+export default function Signup() {
+    const succeededSignup = useSelector(state => state.user.signup)
+    const dispatch = useDispatch()
 
-const mapDispatchToProps = (dispatch) => ({
-    addUser: (data) => dispatch(actions.signup(data)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(function Signup(props) {
     const navigate = useNavigate();
-    const { succeededSignup, errorSignup } = props;
 
     const schema = yup
         .object()
@@ -56,7 +47,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Signup(prop
             password: dataForm.password,
             name: dataForm.name
         };
-        props.addUser(data);
+        dispatch(actions.signup(data))
     }
 
     return (
@@ -66,7 +57,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Signup(prop
                     <div className="divSignup">
                         <div className="">
                             <h2 className='text-center'>Sign up</h2>
-                            <p className="text-muted"> Sign up to add and save recipes!</p>
+                            <p className="text-muted text-center"> Sign up to add recipes!</p>
                             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" method="POST" className='letterSpacing5'>
                                 <input type="email" className="form-control" id="email" placeholder="Email"{...register("email")} />
                                 {errors.email &&
@@ -94,5 +85,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Signup(prop
             </div>
         </>
     )
-})
+}
 

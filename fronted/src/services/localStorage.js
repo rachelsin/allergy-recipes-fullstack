@@ -19,8 +19,4 @@ export function getCurrentUser() {
     }
 }
 
-export default {
-    getCurrentUser,
-    logout,
-    getJwt,
-};
+export default { getCurrentUser, logout, getJwt, };

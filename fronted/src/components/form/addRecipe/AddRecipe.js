@@ -1,175 +1,148 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/actions/action';
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { toast } from 'react-toastify';
 import TitleAndDescription from './TitleAndDescription';
-import Img from './Img';
-import Img2 from './img2';
+import Image from './ddd';
 import Ingredients from './Ingredients';
 import TagsAllergy from './TagsAllergy';
 import Preparation from './Preparation';
-import { toast } from 'react-toastify';
 import './addRecipe.css'
-import ImageRecipe from './ImagRecipe';
 
-function mapStateToProps(state) {
-    return {
-        succeededAddRecipe: state.recipe.succeededAddRecipe,
-    };
-}
+const schema = yup
+    .object()
+    .shape({
+        title: yup
+            .string()
+            .required("Title is a required field")
+            .min(2, "title must be at least 2 characters")
+            .max(255),
+        description: yup.string().max(1024),
+        image: yup
+            .mixed()
+            .notRequired()
+            .test("fileSize", "The file is too large", (value) => {
+                if (!!value) {
+                    return value && value[0]?.size < 2000000;
+                }
+                return true;
+            })
+            .test("type", "We only support jpeg or png", (value) => {
+                if (!!value) {
+                    return value && value[0]?.type === "image/jpeg";
+                }
+                return true;
+            }),
+        tagsFreeOf: yup.array().required().min(1, 'Tags must have at least 1 items'),
+    })
+    .required();
 
-const mapDispatchToProps = (dispatch) => ({
-    addRecipe: (dataRecipe) => dispatch(actions.addNewRecipe(dataRecipe)),
-    setSucceededAddRecipe: (stateSucceed) => dispatch(actions.setSucceededAddRecipe(stateSucceed)),
-})
 
-export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(props) {
+export default function AddRecipe() {
+    const succeededAddRecipe = useSelector(state => state.recipe.succeededAddRecipe)
+    const dispatch = useDispatch()
 
-    const { succeededAddRecipe } = props;
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (succeededAddRecipe === true) {
-            toast.success('sucsses Add a recipe!', {
-                position: toast.POSITION.TOP_RIGHT
-            });
-            let stateSucceed = null;
-            props.setSucceededAddRecipe(stateSucceed);
-            setTimeout(() => navigate('/'), 6000)
-        } else if (succeededAddRecipe === false) {
-            toast.error('not sucsses add recipe  !', {
-                position: toast.POSITION.TOP_RIGHT
-            });
-            let stateSucceed = null
-            props.setSucceededAddRecipe(stateSucceed);
-        }
-    }, [succeededAddRecipe])
-
-    const schema = yup
-        .object()
-        .shape({
-            title: yup.string().required().min(2).max(255),
-            description: yup.string().max(1024),
-            imageRecipe: yup.string(),
-            image: yup.string(),
-            tagsFreeOf: yup.array().required().min(1,'Tags must have at least 1 items'),
-        })
-        .required();
-
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
             title: "",
             description: "",
             image: "",
-            imageRecipe: "",
             tagsFreeOf: [],
-            radio: 'A'
         },
     });
+
     const [data, setData] = useState();
-    const radio = watch("radio")
     const imageUploud = watch("image");
-    const imageLink = watch("imageRecipe");
     const [dataIngredients, setDataIngredients] = useState([])
     const [errorIngredients, setErrorIngredients] = useState([])
     const [dataPreparation, setDataPreparation] = useState([])
     const [errorPreparation, setErrorPreparation] = useState([])
+    const [sendErrors, setSendErrors] = useState(false)
     const [next, setNext] = useState(false)
-    const [errorSendRecipe, setErrorSendRecipe] = useState()
-   
-    useEffect(() => {
-        if (dataIngredients.length < 2) {
-            setErrorIngredients("must be at least 2 ingredients")
-        } else {
-            setErrorIngredients(null)
-        }
-    }, [dataIngredients])
+    const navigate = useNavigate();
+    const ingredientRef = useRef()
+    const preparationRef = useRef()
 
     useEffect(() => {
-        if (dataPreparation.length < 1) {
-            setErrorPreparation("must be at least 1 preparation")
-        } else {
-            setErrorPreparation(null)
+        if (succeededAddRecipe === true) {
+            toast.success('Added a new recipe!', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            let stateSucceed = null;
+            dispatch(actions.setSucceededAddRecipe(stateSucceed));
+
+            setTimeout(() => navigate('/'), 3000)
+        } else if (succeededAddRecipe === false) {
+            toast.error("Sorry, we couldn't add your recipe, try again later", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            let stateSucceed = null;
+            dispatch(actions.setSucceededAddRecipe(stateSucceed));
         }
-    }, [dataPreparation])
+    }, [succeededAddRecipe])
+
     useEffect(() => {
-        if (errorIngredients === null && errorPreparation === null) {
-            setNext(true)
+        if (sendErrors === true) {
+            dataIngredients.length < 2 ?
+                setErrorIngredients("Ingredients must be at least 2 ingredients") : setErrorIngredients(null);
+            dataPreparation.length < 1 ?
+                setErrorPreparation("Preparation must be at least 1 preparation") : setErrorPreparation(null);
+            errorIngredients === null && errorPreparation === null ?
+                setNext(true) : setNext(false);
         }
-    }, [errorIngredients, errorPreparation])
-    useEffect(() => {
-        if (errorSendRecipe) {
-            if (!errorIngredients && errorPreparation) {
-                setErrorSendRecipe("must be at least 1 Preparation");
-            } else if (!errorIngredients && !errorPreparation) {
-                setErrorSendRecipe(null)
-            }
-        }
-    }, [errorSendRecipe, errorIngredients, errorPreparation])
-    const chooseRadio = () => {
-        if (radio === 'A') {
-            if (imageUploud !== '') {
-                return imageUploud[0]
-            } else {
-                return 'https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_960_720.jpg'
-            }
-        } else if (radio === 'B') {
-            if (imageLink) {
-                return imageLink
-            } else {
-                return 'https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_960_720.jpg'
-            }
-        }
+    }, [sendErrors, dataIngredients, dataPreparation, errorIngredients, errorPreparation])
+
+    const handleGoBack = () => {
+        navigate(-1)
+    }
+    const deleteImage = () => {
+        setValue("image", null)
     }
 
     const onSubmit = data => {
         setData(data)
-        const image = imageUploud[0];
-        // console.log(dataIngredients, dataPreparation);
         if (next === true) {
-            console.log("contine");
             let dataRecipe = {
-                nameRecipe: data.title,
-                // recipeImage: data.imageRecipe ? data.imageRecipe : "https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_960_720.jpg",
-                recipeImage: chooseRadio(),
-                tagsFreeOf: data.tagsFreeOf,
+                title: data.title,
                 description: data.description,
+                image: imageUploud[0] ? imageUploud[0] : "https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_960_720.jpg",
+                tagsFreeOf: data.tagsFreeOf,
                 ingredients: dataIngredients,
                 preparation: dataPreparation
             }
-            console.log('data recipe', dataRecipe);
-            props.addRecipe(dataRecipe)
-
+            dispatch(actions.addNewRecipe(dataRecipe))
         } else {
-            if (errorIngredients && errorPreparation) {
-                setErrorSendRecipe("must be at least 2 ingredients")
+            if (errorIngredients && errorPreparation || errorIngredients && !errorPreparation) {
+                ingredientRef.current.focus();
             } else if (!errorIngredients && errorPreparation) {
-                setErrorSendRecipe("must be at least 1 Preparation")
-            } else if (errorIngredients && !errorPreparation) {
-                setErrorSendRecipe("must be at least 2 ingredients")
+                preparationRef.current.focus();
             }
         }
     }
-    const handleGoBack = () => {
-        navigate(-1)
-    }
+
     return (
         <div className="divBackground" >
             <div className='backgroundInDiv'>
-                <h4 className='mx-5' ><i className="bi bi-arrow-left" onClick={handleGoBack} role="button"></i> Add recipe</h4>
-                <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" method="POST" className=''>
+                <h4 className='mx-5' ><i className="bi bi-arrow-left hoverIcon" onClick={handleGoBack} role="button"></i> Add recipe</h4>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    setSendErrors(true)
+                    handleSubmit(onSubmit)()
+                }} autoComplete="off" method="POST" className=''>
                     <div className='cssForm'>
                         <TitleAndDescription register={register} errors={errors} />
-                        <Img register={register} errors={errors} radio={radio} />
-                        {/* <ImageRecipe register={register} errors={errors} /> */}
-
+                        <Image register={register} errors={errors} deleteImage={deleteImage} imageUploud={imageUploud} />
                         <TagsAllergy register={register} errors={errors} />
                         <Ingredients dataIngredients={dataIngredients}
-                            setDataIngredients={setDataIngredients} errorIngredients={errorIngredients} />
-                        <Preparation dataPreparation={dataPreparation} setDataPreparation={setDataPreparation} errorPreparation={errorPreparation} />
+                            setDataIngredients={setDataIngredients} errorIngredients={errorIngredients}
+                            ingredientRef={ingredientRef} />
+                        <Preparation dataPreparation={dataPreparation} setDataPreparation={setDataPreparation} errorPreparation={errorPreparation}
+                            preparationRef={preparationRef} />
                     </div>
                     <div className="m-5 px-5">
                         <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
@@ -178,15 +151,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AddRecipe(p
                             </button>
                         </div>
                         <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
-                            {
-                                errorSendRecipe &&
-                                <span className='errorSpan'>{errorSendRecipe}</span>
-                            }
                         </div>
                     </div>
                 </form>
             </div>
-        </div>
+        </div >
     )
-})
+}
 

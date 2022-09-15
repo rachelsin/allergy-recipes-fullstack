@@ -1,24 +1,15 @@
 import React, { useRef, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/actions/action';
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-const mapStateToProps = (state) => {
-    return {
-        userName: state.user.user.userName,
-        loginStatus: state.user.login,
-    };
-}
-
-const mapDispatchToProps = (dispatch) => ({
-    login: (data) => dispatch(actions.login(data)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(function Login(props) {
-    const { loginStatus } = props;
+export default function Login() {
+    const userName = useSelector(state => state.user.user.userName)
+    const loginStatus = useSelector(state => state.user.login)
+    const dispatch = useDispatch()
 
     const schema = yup
         .object()
@@ -35,19 +26,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Login(props
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (props.userName) {
+        if (userName) {
             navigate('/');
         }
-    }, [props.userName]);
+    }, [userName]);
 
     const onSubmit = dataForm => {
         let data = {
             email: dataForm.email,
             password: dataForm.password
         };
-        props.login(data);
+        dispatch(actions.login(data))
     }
-
 
     return (
         <>
@@ -80,4 +70,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(function Login(props
             </div>
         </>
     )
-})
+}

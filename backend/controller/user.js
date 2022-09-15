@@ -1,7 +1,6 @@
 const User = require('../model/user');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-// const bcrypt = require("bcrypt");
 dotenv.config();
 
 const { saveUser, cheackSignUser } = require('../store/user');
@@ -13,8 +12,6 @@ const signup = async ({ body: { email, password, name } }, res) => {
             password,
             name
         })
-        // const salt = await bcrypt.genSalt(10);
-        // newUser.password = await bcrypt.hash(newUser.password, salt);
         await saveUser(newUser);
         res.json({ status: 200 })
     } catch (err) {
