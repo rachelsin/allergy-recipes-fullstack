@@ -1,34 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import './recpieCard.css'
 import tags from '../../../images/tags.png'
-import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../../redux/actions/action';
 
 
-export default function RecipeCard({ recipeItem, onHandleFavs, myFavorites }) {
-    // const { recipeItem } = props;
+export default function RecipeCard(props) {
+    const { recipeItem } = props;
     const { tagsFreeOf } = recipeItem;
 
     const [favs, setFavs] = useState([])
-    const [click, setClick] = useState()
+
+    // const { card, onHandleFavs, favs } = props;
+    function onHandleFavs() {
+        let id = recipeItem._id
+        let newFavs = [...favs];
+        if (favs.includes(id)) {
+            console.log('h');
+            newFavs.splice(favs.indexOf(id), 1);
+            setFavs(newFavs)
+        } else {
+            console.log('5');
+            let f = [newFavs, id]
+            setFavs(f)
+        }
+    };
 
     function buttonClass(id) {
-        // if (myFavorites) {
-        // console.log(myFavorites);
-        let classes = "bi";
-        classes += myFavorites.includes(id) ? " bi-heart-fill" : " bi-heart";
+        let classes = "hoverIcon save bi";
+        classes += favs.includes(id) ? " bi-heart-fill" : " bi-heart";
         return classes;
-        // }
     }
-    /* function buttonClass(id) {
-        // console.log(id);
-        let classes = "bi";
-        classes += arrayFavorites.includes(id) ? " bi-heart-fill" : " bi-heart";
-        return classes;
-    } */
-
 
     function checkImage() {
         let image = recipeItem.image
@@ -61,11 +63,18 @@ export default function RecipeCard({ recipeItem, onHandleFavs, myFavorites }) {
                         src={checkImage()}
                         className="imgCard"
                     />
+
                 </Link>
-                <div className='box'>
+                {/*  <div className='box'>
                     {recipeItem.title}
-                </div>
-                <span className="float-right">
+                </div> */}
+                <Link to={`/recpies/${recipeItem._id}`} className="cancelLinkStyle">
+                    <div className='box'>
+                        {recipeItem.title}
+                    </div>
+                </Link>
+
+                <span className="float-right save hoverIcon">
                     <i
                         onClick={onHandleFavs}
                         className={buttonClass(recipeItem._id)}

@@ -12,3 +12,27 @@
     background-color: #D8A45B !important;
     border-color: #D8A45B !important;
 }
+
+.iconNav:hover {
+    background-color: #F0F2F5;
+    border-radius: 10%;
+    border-bottom: none;
+    /* border-top-right-radius: inherit; */
+}
+
+
+.iconNav:focus {
+    border-bottom: 3px solid #000;
+}
+
+.iconNav:active {
+    border-bottom: 3px solid #000;
+}
+
+.cancelUnderline {
+    text-decoration: none;
+}
+
+.navIcon{
+        font-size: 1.2em;
+}

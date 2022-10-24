@@ -1,10 +1,13 @@
 import './App.css';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { actions } from './redux/actions/action';
+
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import store from "./redux/store/store";
-import { Provider } from 'react-redux'
+
 import PrivateRoute from './services/privateRoute';
 import Signup from './components/form/signup/Signup'
 import Home from './components/home/Home';
@@ -13,11 +16,20 @@ import NavTop from './components/navbar/NavTop';
 import RecipePage from './components/recpiePage/RecipePage';
 import AddRecipe from './components/form/addRecipe/AddRecipe';
 import Logout from './services/logout'
+import MyRecipes from './components/myRecipes/MyRecipes';
+import MyFavorites from './components/myFavorites/MyFavorites';
+import EditRecipe from './components/editRecipe/EditRecipe';
+
+
 
 
 function App() {
+  const dispatch = useDispatch()
+
+
+
   return (
-    <Provider store={store}>
+    <>
       <ToastContainer />
       <Router>
         <header>
@@ -26,7 +38,10 @@ function App() {
         <main>
           <Routes>
             <Route element={<PrivateRoute />}>
-              <Route path='/addRecipe' element={<AddRecipe />} />
+              <Route path='/add-recipe' element={<AddRecipe />} />
+              <Route path='/my-recipes' element={<MyRecipes />} />
+              <Route path='/my-favorites' element={<MyFavorites />} />
+              <Route path='/my-recipes/edit/:id' element={<EditRecipe />} />
             </Route>
             <Route exact path='/signup' element={<Signup />} />
             <Route exact path='/login' element={<Login />} />
@@ -39,7 +54,7 @@ function App() {
 
         </footer>
       </Router>
-    </Provider>
+    </>
   );
 }
 

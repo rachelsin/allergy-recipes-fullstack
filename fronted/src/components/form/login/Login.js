@@ -6,18 +6,18 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+const schema = yup
+    .object()
+    .shape({
+        email: yup.string().email().required(),
+        password: yup.string().required().min(6).max(1024)
+    })
+    .required();
+
 export default function Login() {
-    const userName = useSelector(state => state.user.user.userName)
+    const userId = useSelector(state => state.user.userId)
     const loginStatus = useSelector(state => state.user.login)
     const dispatch = useDispatch()
-
-    const schema = yup
-        .object()
-        .shape({
-            email: yup.string().email().required(),
-            password: yup.string().required().min(6).max(1024)
-        })
-        .required();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
@@ -26,10 +26,11 @@ export default function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (userName) {
+        console.log(userId);
+        if (userId) {
             navigate('/');
         }
-    }, [userName]);
+    }, [userId]);
 
     const onSubmit = dataForm => {
         let data = {
@@ -38,6 +39,9 @@ export default function Login() {
         };
         dispatch(actions.login(data))
     }
+    useEffect(() => {
+        dispatch(actions.setSucceededSignup(null))
+    }, [])
 
     return (
         <>

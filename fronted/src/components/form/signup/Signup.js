@@ -11,6 +11,8 @@ import './signup.css'
 
 export default function Signup() {
     const succeededSignup = useSelector(state => state.user.signup)
+    const errorsSignup = useSelector(state => state.user.errorsSignup)
+
     const dispatch = useDispatch()
 
     const navigate = useNavigate();
@@ -35,9 +37,10 @@ export default function Signup() {
             });
             setTimeout(() => navigate('/login'), 6000)
         } else if (succeededSignup === false) {
-            toast.error('not seccese ,try again', {
+          /*   toast.error('not seccese ,try again', {
                 position: toast.POSITION.TOP_RIGHT
-            });
+            }); */
+            console.log('w');
         }
     }, [succeededSignup])
 
@@ -78,6 +81,9 @@ export default function Signup() {
                                     </span>
                                 }
                                 <button className="w-100 btn btn-lg  textSignUp mt-3" type="submit">Sign up</button>
+                                {errorsSignup &&
+                                    <div className='errorSpan mt-2'>{errorsSignup}</div>
+                                }
                             </form>
                         </div>
                     </div>

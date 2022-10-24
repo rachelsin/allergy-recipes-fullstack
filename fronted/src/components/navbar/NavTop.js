@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Dropdown, OverlayTrigger, Tooltip, DropdownButton } from 'react-bootstrap';
 import { actions } from '../../redux/actions/action';
 import jwtDecode from "jwt-decode";
 import localStorageFunction from "../../services/localStorage";
 import './nav.css'
 
 
+
 export default function NavTop() {
-    const userName = useSelector(state => state.user.user.userName)
+    const statusLogin = useSelector(state => state.user.statusLogin)
+    const id = useSelector(state => state.user.userId)
+
     const dispatch = useDispatch()
 
     const [user, setUser] = useState()
@@ -23,7 +26,14 @@ export default function NavTop() {
             setUserId(id)
             dispatch(actions.setUserId(id))
         }
-    }, [user, userName]);
+    }, [user, statusLogin]);
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(actions.getArrayFavorite())
+            dispatch(actions.getMyRecipes())
+        }
+    }, [userId])
 
     return (
         <>
@@ -31,11 +41,35 @@ export default function NavTop() {
                 <Container>
                     <Navbar.Brand>Allergy Recipes</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
+                    {/* <Navbar.Collapse id="navbarScroll"></Navbar.Collapse> */}
                     <Navbar.Collapse id="navbarScroll">
-                        <Nav className="me-auto"  navbarScroll>
-                            <NavLink className="nav-link" to="/">Home</NavLink>
+                        <Nav className="justify-content-center flex-grow-1 pe-3" navbarScroll>
+                            <NavLink className="nav-link px-5 mx-1 iconNav pt-0 " to="/">
+
+                                <div className="text-center">
+                                    <i className="bi bi-house-door navIcon  mx-auto text-center"></i>
+                                </div>
+                                <p className="mb-0">Home</p>
+                            </NavLink>
+
                             {user &&
-                                <NavLink className="nav-link" to="/addRecipe">Add a Recipe</NavLink>
+                                <>
+                                    <NavLink className="nav-link px-5 mx-1 iconNav pt-0" to="/add-recipe">
+                                        <div className="text-center">
+                                            <i className="bi bi-journal-plus navIcon"></i>
+                                        </div>
+                                    <p className="mb-0 fs-6">Add a Recipe</p>
+                                        {/* </OverlayTrigger> */}
+                                    </NavLink>
+                                    <NavLink className="nav-link px-5 mx-1 iconNav pt-0" to="/my-favorites">
+                                        <div className="text-center">
+                                        <i className="bi bi-heart navIcon"></i>
+                                        </div>
+                                    <p className="mb-0 fs-8">My Favorites</p>
+                                    </NavLink>
+
+                                    {/* <NavLink className="nav-link" to="/my-favorites">My Favorites</NavLink> */}
+                                </>
                             }
                         </Nav>
                         <Nav>
@@ -47,7 +81,25 @@ export default function NavTop() {
                                 </>
                             }
                             {user &&
-                                <NavLink className="btn btn-sm btn-outline-secondary" to="/logout">logout</NavLink>
+                                <Dropdown
+                                    align="end"
+                                    className="ps-5"
+                                >
+                                    <Dropdown.Toggle id="dropdown-basic" variant="white">
+                                        <i className="bi bi-person-circle bigIcon "></i>
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu>
+                                        {/* <Dropdown.Item> */}
+                                        <NavLink className="cancelUnderline" to="/my-recipes"> <Dropdown.Item>My Recipes</Dropdown.Item></NavLink>
+                                        {/* </Dropdown.Item> */}
+                                        <Dropdown.Divider />
+
+                                        <NavLink className="cancelUnderline" to="/logout"><Dropdown.Item>logout</Dropdown.Item></NavLink>
+
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                // <Navbar.Brand></Navbar.Brand>
                             }
                         </Nav>
                     </Navbar.Collapse>

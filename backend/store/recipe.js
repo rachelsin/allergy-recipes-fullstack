@@ -20,4 +20,10 @@ const findOneRecipe = (id) => {
     return Recipe.findOne({ _id: id })
 }
 
-module.exports = { saveRecipe, countRecipes, findRecipesByTags, findOneRecipe }
+const deleteOneRecipe = (id) => {
+    return Recipe.findOneAndRemove({
+        _id: id
+    });
+}
+
+module.exports = { saveRecipe, countRecipes, findRecipesByTags, findOneRecipe, deleteOneRecipe }

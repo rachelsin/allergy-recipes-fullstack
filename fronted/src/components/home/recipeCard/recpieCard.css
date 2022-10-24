@@ -69,3 +69,8 @@ clickMe:active {
 .imgCard:hover {
     box-shadow: 0 0 6px rgb(92, 115, 128);
 }
+
+.save:hover {
+    box-shadow: 0 0 6px rgb(92, 115, 128);
+    cursor: pointer;
+}

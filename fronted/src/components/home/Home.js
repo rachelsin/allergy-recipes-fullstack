@@ -11,6 +11,9 @@ import SearchTags from './search/SearchTags';
 
 
 export default function Home() {
+    const arrayFavorites = useSelector(state => state.favorite.arrayFavorites)
+    const myFavorites = useSelector(state => state.favorite.myFavorites)
+    const userId = useSelector(state => state.user.userId)
     const recipes = useSelector(state => state.recipe.recipesSearchResults)
     const numberOfPages = useSelector(state => state.recipe.numberOfPages)
     const dispatch = useDispatch()
@@ -20,6 +23,19 @@ export default function Home() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { register, watch, setValue } = useForm();
     const tagsAllergy = watch("tagsFreeOf");
+
+    function onHandleFavs(id) {
+        console.log(id);
+        dispatch(actions.addFavorite(id))
+    };
+    useEffect(() => {
+
+    }, [])
+    /*  useEffect(() => {
+         if (userId) {
+             dispatch(actions.getArrayFavorite())
+         }
+     }, [userId]) */
 
     useEffect(() => {
         let tags;
@@ -100,6 +116,8 @@ export default function Home() {
                                         <RecipeCard
                                             key={recipeItem._id}
                                             recipeItem={recipeItem}
+                                            onHandleFavs={() => onHandleFavs(recipeItem._id)}
+                                            myFavorites={myFavorites}
                                         />
                                     )
                                 })
