@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from 'react-toastify';
 import TitleAndDescription from './TitleAndDescription';
-import Image from './ddd';
+import Image from './image';
 import Ingredients from './Ingredients';
 import TagsAllergy from './TagsAllergy';
 import Preparation from './Preparation';
@@ -59,9 +59,9 @@ export default function AddRecipe() {
     const [data, setData] = useState();
     const imageUploud = watch("image");
     const [dataIngredients, setDataIngredients] = useState([])
-    const [errorIngredients, setErrorIngredients] = useState([])
+    const [errorIngredients, setErrorIngredients] = useState(null)
     const [dataPreparation, setDataPreparation] = useState([])
-    const [errorPreparation, setErrorPreparation] = useState([])
+    const [errorPreparation, setErrorPreparation] = useState(null)
     const [sendErrors, setSendErrors] = useState(false)
     const [next, setNext] = useState(false)
     const navigate = useNavigate();
@@ -86,6 +86,14 @@ export default function AddRecipe() {
         }
     }, [succeededAddRecipe])
 
+    useEffect(()=>{
+        if (dataIngredients.length >= 2 && dataPreparation.length >= 1){
+            setNext(true)  
+        }else{
+            setNext(false);
+        }
+    }, [dataIngredients, dataPreparation])
+
     useEffect(() => {
         if (sendErrors === true) {
             dataIngredients.length < 2 ?
@@ -95,7 +103,7 @@ export default function AddRecipe() {
             errorIngredients === null && errorPreparation === null ?
                 setNext(true) : setNext(false);
         }
-    }, [sendErrors, dataIngredients, dataPreparation, errorIngredients, errorPreparation])
+    }, [sendErrors, dataIngredients, dataPreparation, errorIngredients, errorPreparation, next])
 
     const handleGoBack = () => {
         navigate(-1)

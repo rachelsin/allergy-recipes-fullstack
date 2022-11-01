@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../redux/actions/action';
+import { actions } from '../../../redux/actions/action';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import TitleAndDescription from './../form/addRecipe/TitleAndDescription';
-import Ingredients from './../form/addRecipe/Ingredients';
-import TagsAllergy from './../form/addRecipe/TagsAllergy';
-import Preparation from './../form/addRecipe/Preparation';
+import TitleAndDescription from '../addRecipe/TitleAndDescription';
+import Ingredients from '../addRecipe/Ingredients';
+import TagsAllergy from '../addRecipe/TagsAllergy';
+import Preparation from '../addRecipe/Preparation';
 import { toast } from 'react-toastify';
 
 const schema = yup

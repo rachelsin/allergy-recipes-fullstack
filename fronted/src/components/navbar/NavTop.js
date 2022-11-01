@@ -7,6 +7,8 @@ import jwtDecode from "jwt-decode";
 import localStorageFunction from "../../services/localStorage";
 import './nav.css'
 
+import logobig from '../../images/logo.png'
+
 
 
 export default function NavTop() {
@@ -38,34 +40,45 @@ export default function NavTop() {
     return (
         <>
             <Navbar bg="white" expand="lg" className="shadow-sm">
+
                 <Container>
-                    <Navbar.Brand>Allergy Recipes</Navbar.Brand>
+                    <Navbar.Brand>
+                        <NavLink to="/">
+                            <img
+                                src={logobig}
+                                // width="30"
+                                height="60"
+                                className="d-inline-block align-top"
+                                alt="logo"
+                            />
+                        </NavLink>
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
-                    {/* <Navbar.Collapse id="navbarScroll"></Navbar.Collapse> */}
                     <Navbar.Collapse id="navbarScroll">
+                        {/* <Navbar.Text> */}
                         <Nav className="justify-content-center flex-grow-1 pe-3" navbarScroll>
                             <NavLink className="nav-link px-5 mx-1 iconNav pt-0 " to="/">
 
-                                <div className="text-center">
+                                <div className="text-center w-dis">
                                     <i className="bi bi-house-door navIcon  mx-auto text-center"></i>
                                 </div>
-                                <p className="mb-0">Home</p>
+                                <p className="mb-0 titleNav ">Home</p>
                             </NavLink>
 
                             {user &&
                                 <>
-                                    <NavLink className="nav-link px-5 mx-1 iconNav pt-0" to="/add-recipe">
+                                    <NavLink className="nav-link px-4 mx-1 iconNav pt-0" to="/add-recipe">
                                         <div className="text-center">
                                             <i className="bi bi-journal-plus navIcon"></i>
                                         </div>
-                                    <p className="mb-0 fs-6">Add a Recipe</p>
+                                        <p className="mb-0 fs-6 titleNav">Add a Recipe</p>
                                         {/* </OverlayTrigger> */}
                                     </NavLink>
-                                    <NavLink className="nav-link px-5 mx-1 iconNav pt-0" to="/my-favorites">
+                                    <NavLink className="nav-link px-4 mx-1 iconNav pt-0" to="/my-favorites">
                                         <div className="text-center">
-                                        <i className="bi bi-heart navIcon"></i>
+                                            <i className="bi bi-heart navIcon"></i>
                                         </div>
-                                    <p className="mb-0 fs-8">My Favorites</p>
+                                        <p className="mb-0 fs-8 titleNav">My Favorites</p>
                                     </NavLink>
 
                                     {/* <NavLink className="nav-link" to="/my-favorites">My Favorites</NavLink> */}
@@ -90,18 +103,25 @@ export default function NavTop() {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                        {/* <Dropdown.Item> */}
-                                        <NavLink className="cancelUnderline" to="/my-recipes"> <Dropdown.Item>My Recipes</Dropdown.Item></NavLink>
-                                        {/* </Dropdown.Item> */}
-                                        <Dropdown.Divider />
+                                        <Dropdown.Item>
 
-                                        <NavLink className="cancelUnderline" to="/logout"><Dropdown.Item>logout</Dropdown.Item></NavLink>
+                                            <NavLink className="cancelUnderline nav-link" to="/my-recipes">
+                                                My Recipes
+                                            </NavLink>
+                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
+                                        <Dropdown.Item>
+                                            <NavLink className="cancelUnderline nav-link" to="/logout">
+                                                Logout
+                                            </NavLink>
+                                        </Dropdown.Item>
 
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 // <Navbar.Brand></Navbar.Brand>
                             }
                         </Nav>
+                        {/* </Navbar.Text> */}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

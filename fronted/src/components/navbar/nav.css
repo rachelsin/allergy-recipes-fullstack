@@ -21,18 +21,28 @@
 }
 
 
-.iconNav:focus {
+/* .iconNav:focus {
     border-bottom: 3px solid #000;
 }
 
 .iconNav:active {
     border-bottom: 3px solid #000;
-}
+} */
 
 .cancelUnderline {
     text-decoration: none;
 }
 
-.navIcon{
-        font-size: 1.2em;
+.navIcon {
+    font-size: 1.2em;
 }
+
+/* @media only screen and (max-width: 990px) {
+    .titleNav {
+        display: none;
+    }
+
+    .w-dis {
+        width: 20px;
+    }
+} */

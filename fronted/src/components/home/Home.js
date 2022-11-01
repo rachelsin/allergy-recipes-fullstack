@@ -99,6 +99,7 @@ export default function Home() {
 
     return (
         <div className='bg-l'>
+            <div className='p-1 bg-dark'></div>
             <div className='text-center pt-3 bg-l2'>
                 <div className='display-6 pb-1'>Eating with Food Allergies</div>
                 <div>Show only recipes that are FREE of: <small> (select one or more)</small></div>
