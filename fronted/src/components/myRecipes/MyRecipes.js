@@ -15,12 +15,9 @@ export default function MyRecipes() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('h');
         if (userId) {
             dispatch(actions.getMyRecipes())
-            console.log(userId);
         }
-
     }, [userId])
 
     function onHandleFavs(id) {

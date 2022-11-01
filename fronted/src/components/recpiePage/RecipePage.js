@@ -3,16 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../redux/actions/action';
 import { Link } from "react-router-dom";
-
-
 import './recipePage.css'
-import Delete from './delete';
+import DeleteRecipe from '../deleteRecipe/DeleteRecipe';
 
 export default function RecipePage() {
     const recipe = useSelector(state => state.recipe.selectedRecipe)
     const myRecipes = useSelector(state => state.recipe.myRecipe.recipes)
     const myRecipesArray = myRecipes.map((i) => i._id)
-    // console.log(d);
     useEffect(() => {
         if (recipe && myRecipesArray && myRecipesArray.includes(recipe._id)) {
             setMyRecipe(true)
@@ -21,7 +18,6 @@ export default function RecipePage() {
         }
     }, [recipe, myRecipesArray])
 
-    // const recipe = useSelector(state => state.recipe.selectedRecipe)
     const dispatch = useDispatch()
     const [myRecipe, setMyRecipe] = useState()
 
@@ -37,10 +33,6 @@ export default function RecipePage() {
     const handleGoBack = () => {
         navigate(-1)
     }
-
-    /* function deleteRecipe(id) {
-        dispatch(actions.deleteRecipe(id))
-    } */
 
     function checkImage() {
         let image = recipe?.image
@@ -63,15 +55,9 @@ export default function RecipePage() {
     const [userme, setUserme] = useState();
 
     function handleShow(id) {
-        console.log(id);
         setUserme(id)
-        console.log(id);
         setShow(true);
     }
-
-    useEffect(() => {
-        console.log(show);
-    }, [show, userme])
 
     return (
         <>
@@ -79,10 +65,6 @@ export default function RecipePage() {
                 <div className='divBackground'>
                     <div className='backgroundInDiv'>
                         <div className='mb-5'>
-                            {/* <p className='mx-5' role="button" onClick={handleGoBack}>
-                                <i className="bi bi-arrow-left"></i>
-                                Go back
-                            </p> */}
                             <span role="button" onClick={handleGoBack} className='float-start mx-5'><i className="bi bi-arrow-left"></i>Go back</span>
                             {myRecipe &&
                                 <span className='float-end mx-5'>
@@ -91,19 +73,16 @@ export default function RecipePage() {
                                             <i className="bi bi-pencil px-1" onClick="">Edit</i>
                                         </span>
                                     </Link>
-                                    {/* <Link to={`/my-recipes/delete/${recipe._id}`}> */}
-                                    {/* <span >Delete </span> */}
                                     <span className='hoverIcon'>
                                         <i
                                             className="bi bi-trash3 px-1"
                                             onClick={() => handleShow(recipe._id)}
                                         >Delete</i>
                                     </span>
-                                    {/* </Link> */}
                                 </span>
                             }
                             {
-                                show ? <Delete id={recipe._id} show={setShow} /> : null
+                                show ? <DeleteRecipe id={recipe._id} show={setShow} /> : null
                             }
                         </div>
                         {myRecipe &&

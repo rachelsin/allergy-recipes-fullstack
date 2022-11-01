@@ -13,12 +13,9 @@ export default function MyFavorites() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('h');
         if (userId) {
             dispatch(actions.getMyRecipesFavorites())
-            console.log(userId);
         }
-
     }, [userId, myFavorites])
 
     function onHandleFavs(id) {
@@ -51,7 +48,6 @@ export default function MyFavorites() {
                         }
                     </Row>
                 </div>
-
             </div>
         </div>
     )

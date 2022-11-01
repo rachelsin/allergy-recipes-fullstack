@@ -17,7 +17,6 @@ const addRecipe = async ({ body: { title, description, image, tagsFreeOf, ingred
         })
         const recipe = await saveRecipe(newRecipe);
         await addRecipeToMyRecipesInUser(recipe.user_id, recipe._id)
-        // await User.findByIdAndUpdate({ _id: recipe.user_id }, { $push: { 'myRecipes': recipe._id } });
         res.json({ status: 200 })
     } catch (err) {
         console.log(err)
@@ -53,7 +52,6 @@ const getRecipe = async ({ params: { id } }, res) => {
 const getMyRecipes = async ({ params: { userId } }, res) => {
     try {
         const recipes = await findRecipe(userId)
-        // const recipes = await Recipe.find({ user_id: userId });
         res.status(200).send(recipes)
     } catch (err) {
         console.log(err)
@@ -63,7 +61,6 @@ const getMyRecipes = async ({ params: { userId } }, res) => {
 const myRecipesFavorites = async ({ params: { userId } }, res) => {
     try {
         const recipes = await findMyFavorites(userId)
-        // const recipes = await User.findById({ _id: userId }).populate('favoriteRecipes');
         res.status(200).send(recipes.favoriteRecipes)
     } catch (err) {
         console.log(err)
@@ -85,7 +82,6 @@ const addToFavorites = async ({ params: { userId }, body: { recipeId } }, res) =
 const getArrayFavorite = async ({ params: { userId } }, res) => {
     try {
         const user = await findUserById(userId)
-        // const user = await User.findById({ _id: userId });
         res.status(200).send(user.favoriteRecipes)
     } catch (err) {
         console.log(err)
@@ -106,10 +102,6 @@ const editRecipe = async ({ body: { title, description, tagsFreeOf, ingredients,
         const findRecipe = await findOneRecipe(id);
         let image = findRecipe.image
         const recipe = await findRecipeAndEdit(id, title, description, image, tagsFreeOf, ingredients, preparation, userId)
-        /*  const recipe = await Recipe.findByIdAndUpdate(
-             id,
-             { $set: { title, description, image, tagsFreeOf, ingredients, preparation, user_id: userId } }, { new: true }
-         ); */
         res.json({ status: 200 })
     } catch (err) {
         console.log(err)

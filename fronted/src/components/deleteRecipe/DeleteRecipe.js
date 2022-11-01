@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../redux/actions/action';
 import { useNavigate } from 'react-router-dom';
 
-export default function Delete(props) {
+export default function DeleteRecipe(props) {
     const { id } = props;
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -13,7 +13,6 @@ export default function Delete(props) {
 
     useEffect(() => {
         if (deleteRecipe) {
-            console.log('d');
             navigate('/my-recipes')
             dispatch(actions.setSucceededDeleteRecipe(false))
         }

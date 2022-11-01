@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../../redux/actions/action';
+import { actions } from '../../redux/actions/action';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";

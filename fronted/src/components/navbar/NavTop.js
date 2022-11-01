@@ -6,7 +6,6 @@ import { actions } from '../../redux/actions/action';
 import jwtDecode from "jwt-decode";
 import localStorageFunction from "../../services/localStorage";
 import './nav.css'
-
 import logobig from '../../images/logo.png'
 
 
@@ -55,7 +54,6 @@ export default function NavTop() {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
-                        {/* <Navbar.Text> */}
                         <Nav className="justify-content-center flex-grow-1 pe-3" navbarScroll>
                             <NavLink className="nav-link px-5 mx-1 iconNav pt-0 " to="/">
 
@@ -80,8 +78,6 @@ export default function NavTop() {
                                         </div>
                                         <p className="mb-0 fs-8 titleNav">My Favorites</p>
                                     </NavLink>
-
-                                    {/* <NavLink className="nav-link" to="/my-favorites">My Favorites</NavLink> */}
                                 </>
                             }
                         </Nav>
@@ -118,10 +114,8 @@ export default function NavTop() {
 
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                // <Navbar.Brand></Navbar.Brand>
                             }
                         </Nav>
-                        {/* </Navbar.Text> */}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

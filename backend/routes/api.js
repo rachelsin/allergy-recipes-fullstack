@@ -7,7 +7,6 @@ const upload = require('../middleware/upload');
 router.post('/signup', user.signup);
 router.post('/login', user.login);
 router.post('/addRecipe', auth, upload.single('image'), recipe.addRecipe);
-// router.post('/addRecipe', upload.single('image'), recipe.addRecipe);
 router.put('/editRecipe/:id', recipe.editRecipe);
 router.delete('/deleteRecipe/:id', recipe.deleteRecipe);
 
