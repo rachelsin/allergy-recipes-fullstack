@@ -61,7 +61,9 @@ const getMyRecipes = async ({ params: { userId } }, res) => {
 const myRecipesFavorites = async ({ params: { userId } }, res) => {
     try {
         const recipes = await findMyFavorites(userId)
-        res.status(200).send(recipes.favoriteRecipes)
+        if (recipes){
+            res.status(200).send(recipes.favoriteRecipes)
+        }
     } catch (err) {
         console.log(err)
         res.status(400).send(err.message)
